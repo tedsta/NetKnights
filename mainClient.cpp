@@ -25,9 +25,12 @@
 
 #include "Components/Character.h"
 #include "Components/Network.h"
+#include "Components/Projectile.h"
+#include "Components/ProjectileWeapon.h"
 
-#include "Systems/PlayerInputSystem.h"
 #include "Systems/ClientCharacterPredictionSystem.h"
+#include "Systems/PlayerInputSystem.h"
+#include "Systems/ProjectileWeaponSystem.h"
 
 #include "Events.h"
 
@@ -44,6 +47,8 @@ int main()
 
     fsn::ComponentTypeManager::add<Character>();
     fsn::ComponentTypeManager::add<Network>();
+    fsn::ComponentTypeManager::add<Projectile>();
+    fsn::ComponentTypeManager::add<ProjectileWeapon>();
 
     // Setup the engine, render manager, and fake connection.
     fsn::Engine engine(1.f/60.f);
@@ -63,11 +68,13 @@ int main()
     fsn::InputSystem inputSys(&renderMgr.getWindow());
     PlayerInputSystem playerInputSys(eventMgr);
     ClientCharacterPredictionSystem clientMoveSys(entityMgr);
+    ProjectileWeaponSystem projWeaponSys(entityMgr);
 
     engine.addSystem(spriteSys);
     engine.addSystem(inputSys);
     engine.addSystem(playerInputSys);
     engine.addSystem(clientMoveSys);
+    engine.addSystem(projWeaponSys);
 
     // Game specific manager type stuff
     ClientNetworkLayer networkLayer(eventMgr, entityMgr, conn);

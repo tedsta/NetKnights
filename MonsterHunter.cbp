@@ -71,6 +71,8 @@
 		<Unit filename="include/ClientNetworkLayer.h" />
 		<Unit filename="include/Components/Character.h" />
 		<Unit filename="include/Components/Network.h" />
+		<Unit filename="include/Components/Projectile.h" />
+		<Unit filename="include/Components/ProjectileWeapon.h" />
 		<Unit filename="include/EntityTags.h" />
 		<Unit filename="include/Events.h" />
 		<Unit filename="include/GUI/Element.h" />
@@ -83,6 +85,7 @@
 		<Unit filename="include/ServerNetworkLayer.h" />
 		<Unit filename="include/Systems/ClientCharacterPredictionSystem.h" />
 		<Unit filename="include/Systems/PlayerInputSystem.h" />
+		<Unit filename="include/Systems/ProjectileWeaponSystem.h" />
 		<Unit filename="include/Systems/ServerCharacterPredictionSystem.h" />
 		<Unit filename="mainClient.cpp">
 			<Option target="DebugClient" />
@@ -101,6 +104,7 @@
 		<Unit filename="src/ServerNetworkLayer.cpp" />
 		<Unit filename="src/Systems/ClientCharacterPredictionSystem.cpp" />
 		<Unit filename="src/Systems/PlayerInputSystem.cpp" />
+		<Unit filename="src/Systems/ProjectileWeaponSystem.cpp" />
 		<Unit filename="src/Systems/ServerCharacterPredictionSystem.cpp" />
 		<Extensions>
 			<code_completion />
