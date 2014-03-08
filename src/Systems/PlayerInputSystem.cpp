@@ -129,6 +129,20 @@ bool PlayerInputSystem::onKeyReleased(sf::Keyboard::Key key)
             break;
         }
 
+        case sf::Keyboard::Key::Space:
+        {
+            /*mInput.sequence++;
+            mInput.ticksSinceLastInput = mTick-mLastInputTick;
+            mLastInputTick = mTick;
+
+            mInput.right = true;
+            mEventManager.fireEvent(CharacterInputEvent(mLocalPlayer, mInput));*/
+
+            mLocalPlayer.getComponent<ProjectileWeapon>().attemptFire = false;
+
+            break;
+        }
+
         default:
             break;
     }
