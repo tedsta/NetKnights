@@ -27,6 +27,7 @@
 #include "Components/Network.h"
 #include "Components/Projectile.h"
 #include "Components/ProjectileWeapon.h"
+#include "Components/Velocity.h"
 
 #include "Systems/ClientCharacterPredictionSystem.h"
 #include "Systems/PlayerInputSystem.h"
@@ -49,6 +50,7 @@ int main()
     fsn::ComponentTypeManager::add<Network>();
     fsn::ComponentTypeManager::add<Projectile>();
     fsn::ComponentTypeManager::add<ProjectileWeapon>();
+    fsn::ComponentTypeManager::add<Velocity>();
 
     // Setup the engine, render manager, and fake connection.
     fsn::Engine engine(1.f/60.f);
