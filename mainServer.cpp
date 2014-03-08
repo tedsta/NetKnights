@@ -27,9 +27,11 @@
 #include "Components/Network.h"
 #include "Components/Projectile.h"
 #include "Components/ProjectileWeapon.h"
+#include "Components/Velocity.h"
 
 #include "Systems/ServerCharacterPredictionSystem.h"
 #include "Systems/ProjectileWeaponSystem.h"
+#include "Systems/VelocitySystem.h"
 
 #include "Events.h"
 
@@ -47,9 +49,9 @@ int main()
 
     fsn::ComponentTypeManager::add<Character>();
     fsn::ComponentTypeManager::add<Network>();
-
     fsn::ComponentTypeManager::add<Projectile>();
     fsn::ComponentTypeManager::add<ProjectileWeapon>();
+    fsn::ComponentTypeManager::add<Velocity>();
 
     // Setup the engine, render manager, and fake connection.
     fsn::Engine engine(1.f/60.f);
@@ -71,11 +73,13 @@ int main()
     fsn::InputSystem inputSys(&renderMgr.getWindow());
     ServerCharacterPredictionSystem serverMoveSys(entityMgr, networkLayer);
     ProjectileWeaponSystem projWeaponSys(entityMgr);
+    VelocitySystem velSys(entityMgr);
 
     engine.addSystem(spriteSys);
     engine.addSystem(inputSys);
     engine.addSystem(serverMoveSys);
     engine.addSystem(projWeaponSys);
+    engine.addSystem(velSys);
 
     // Register everything with the EventManager
     eventMgr.addListener(&ServerCharacterPredictionSystem::onCharacterInput, serverMoveSys);

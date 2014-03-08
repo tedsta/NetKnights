@@ -32,6 +32,7 @@
 #include "Systems/ClientCharacterPredictionSystem.h"
 #include "Systems/PlayerInputSystem.h"
 #include "Systems/ProjectileWeaponSystem.h"
+#include "Systems/VelocitySystem.h"
 
 #include "Events.h"
 
@@ -71,12 +72,14 @@ int main()
     PlayerInputSystem playerInputSys(eventMgr);
     ClientCharacterPredictionSystem clientMoveSys(entityMgr);
     ProjectileWeaponSystem projWeaponSys(entityMgr);
+    VelocitySystem velSys(entityMgr);
 
     engine.addSystem(spriteSys);
     engine.addSystem(inputSys);
     engine.addSystem(playerInputSys);
     engine.addSystem(clientMoveSys);
     engine.addSystem(projWeaponSys);
+    engine.addSystem(velSys);
 
     // Game specific manager type stuff
     ClientNetworkLayer networkLayer(eventMgr, entityMgr, conn);
