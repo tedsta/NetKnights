@@ -8,12 +8,14 @@
 struct CharacterState
 {
     sf::Vector2f position;
+    bool firing;
+
     std::size_t sequence;
 };
 
 struct CharacterInput
 {
-    CharacterInput() : up(false), down(false), left(false), right(false), sequence(0)
+    CharacterInput() : up(false), down(false), left(false), right(false), fire(false), sequence(0)
     {
     }
 
@@ -22,6 +24,8 @@ struct CharacterInput
     bool down;
     bool left;
     bool right;
+
+    bool fire;
 
     std::size_t sequence;            // Sequence number of this input for the character
     std::size_t ticksSinceLastInput; // Number of game ticks since last input

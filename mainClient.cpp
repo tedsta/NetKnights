@@ -111,7 +111,7 @@ int main()
     window.addChild(&button);
 
     // Connect
-    conn.connectClient("Teddy-PC", 54300);
+    conn.connectClient("localhost", 54300);
     networkLayer.login("player", "asdf");
 
     // Run the main loop.

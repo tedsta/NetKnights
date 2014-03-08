@@ -13,5 +13,10 @@ CharacterState CharacterMover::step(const CharacterState& initial, const Charact
     if (input.right)
         after.position.x += 1.f;
 
+    if (input.fire)
+        after.firing = true;
+    else
+        after.firing = false;
+
     return after;
 }

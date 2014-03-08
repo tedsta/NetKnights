@@ -2,6 +2,8 @@
 
 #include <Fission/Rendering/Transform.h>
 
+#include "Components/ProjectileWeapon.h"
+
 ServerCharacterPredictionSystem::ServerCharacterPredictionSystem(fsn::EntityManager& entityMgr, ServerNetworkLayer& networkLayer) :
     fsn::ComponentSystem(entityMgr), mNetworkLayer(networkLayer), mTick(0), mTicksBeforeInputUpdate(InputUpdateInterval)
 {
@@ -106,4 +108,6 @@ void ServerCharacterPredictionSystem::setNewState(const fsn::EntityRef& entity, 
 
     // Put the entity at the new state
     entity.getComponent<fsn::Transform>().setPosition(state.position);
+
+    entity.getComponent<ProjectileWeapon>().attemptFire = state.firing;
 }

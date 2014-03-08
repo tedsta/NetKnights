@@ -13,7 +13,7 @@ void ProjectileWeaponSystem::processEntity(const fsn::EntityRef& entity, const f
 
     if (weap.attemptFire && weap.coolDownLeft <= 0)
     {
-
+        std::cout << "fire\n";
         weap.coolDownLeft = weap.coolDown;
     }
     else

@@ -5,6 +5,7 @@
 #include <Fission/Rendering/Transform.h>
 
 #include "Components/Character.h"
+#include "Components/ProjectileWeapon.h"
 
 ClientCharacterPredictionSystem::ClientCharacterPredictionSystem(fsn::EntityManager& entityMgr) : fsn::ComponentSystem(entityMgr),
     mTick(0)
@@ -146,4 +147,6 @@ void ClientCharacterPredictionSystem::setNewState(const fsn::EntityRef& entity, 
 
     // Put the entity at the new state
     entity.getComponent<fsn::Transform>().setPosition(state.position);
+
+    entity.getComponent<ProjectileWeapon>().attemptFire = state.firing;
 }
