@@ -6,6 +6,7 @@
 #include "EntityTags.h"
 
 #include "Components/Character.h"
+#include "Components/ProjectileWeapon.h"
 
 PlayerManager::PlayerManager(fsn::EntityManager& entityMgr) : mEntityManager(entityMgr)
 {
@@ -35,6 +36,7 @@ const fsn::EntityRef& PlayerManager::spawnPlayer(int netID)
     entity.addComponent<fsn::Transform>();
     entity.addComponent<fsn::Sprite>("Content/Textures/Characters/microknight.png", 40, 20);
     entity.addComponent<Character>();
+    entity.addComponent<ProjectileWeapon>();
 
     entity.setTag(etags::Player);
     entity.getComponent<fsn::Transform>().setScale(2.f, 2.f);
