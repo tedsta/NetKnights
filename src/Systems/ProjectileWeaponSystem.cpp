@@ -24,7 +24,7 @@ void ProjectileWeaponSystem::processEntity(const fsn::EntityRef& entity, const f
         auto proj = mEntityManager.createEntityRef(mEntityManager.createEntity());
         proj.addComponent<fsn::Transform>(entity.getComponent<fsn::Transform>().getPosition());
         proj.addComponent<fsn::Sprite>("Content/Textures/bullet.png");
-        proj.addComponent<Velocity>(dir);
+        proj.addComponent<Velocity>(dir.x, dir.y);
         proj.addComponent<Projectile>();
 
         weap.coolDownLeft = weap.coolDown;
