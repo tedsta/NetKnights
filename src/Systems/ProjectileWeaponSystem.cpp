@@ -1,8 +1,14 @@
 #include "Systems/ProjectileWeaponSystem.h"
 
-#include "Components/ProjectileWeapon.h"
+#include <Fission/Rendering/Transform.h>
+#include <Fission/Rendering/Sprite.h>
 
-ProjectileWeaponSystem::ProjectileWeaponSystem(fsn::EntityManager& entityMgr) : fsn::ComponentSystem(entityMgr)
+#include "Components/Projectile.h"
+#include "Components/ProjectileWeapon.h"
+#include "Components/Velocity.h"
+
+ProjectileWeaponSystem::ProjectileWeaponSystem(fsn::EntityManager& entityMgr) : fsn::ComponentSystem(entityMgr),
+    mEntityManager(entityMgr)
 {
     mAspect.all<ProjectileWeapon>();
 }
@@ -13,7 +19,14 @@ void ProjectileWeaponSystem::processEntity(const fsn::EntityRef& entity, const f
 
     if (weap.attemptFire && weap.coolDownLeft <= 0)
     {
-        std::cout << "fire\n";
+        sf::Vector2f dir = weap.direction*weap.fireSpeed;
+
+        auto proj = mEntityManager.createEntityRef(mEntityManager.createEntity());
+        proj.addComponent<fsn::Transform>(entity.getComponent<fsn::Transform>().getPosition());
+        proj.addComponent<fsn::Sprite>("Content/Textures/bullet.png");
+        proj.addComponent<Velocity>(dir);
+        proj.addComponent<Projectile>();
+
         weap.coolDownLeft = weap.coolDown;
     }
     else

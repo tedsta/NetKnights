@@ -11,6 +11,7 @@ class ProjectileWeaponSystem : public fsn::ComponentSystem
         void processEntity(const fsn::EntityRef& entity, const float dt);
 
     private:
+        fsn::EntityManager& mEntityManager;
 };
 
 #endif // PROJECTILEWEAPONSYSTEM_H

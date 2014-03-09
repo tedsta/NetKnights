@@ -9,5 +9,4 @@ VelocitySystem::VelocitySystem(fsn::EntityManager& entityMgr) : fsn::ComponentSy
 
 void VelocitySystem::processEntity(const fsn::EntityRef& entity, const float dt)
 {
-
 }

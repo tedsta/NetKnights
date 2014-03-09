@@ -73,6 +73,7 @@
 		<Unit filename="include/Components/Network.h" />
 		<Unit filename="include/Components/Projectile.h" />
 		<Unit filename="include/Components/ProjectileWeapon.h" />
+		<Unit filename="include/Components/Velocity.h" />
 		<Unit filename="include/EntityTags.h" />
 		<Unit filename="include/Events.h" />
 		<Unit filename="include/GUI/Element.h" />
@@ -87,6 +88,7 @@
 		<Unit filename="include/Systems/PlayerInputSystem.h" />
 		<Unit filename="include/Systems/ProjectileWeaponSystem.h" />
 		<Unit filename="include/Systems/ServerCharacterPredictionSystem.h" />
+		<Unit filename="include/Systems/VelocitySystem.h" />
 		<Unit filename="mainClient.cpp">
 			<Option target="DebugClient" />
 		</Unit>
@@ -106,6 +108,7 @@
 		<Unit filename="src/Systems/PlayerInputSystem.cpp" />
 		<Unit filename="src/Systems/ProjectileWeaponSystem.cpp" />
 		<Unit filename="src/Systems/ServerCharacterPredictionSystem.cpp" />
+		<Unit filename="src/Systems/VelocitySystem.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

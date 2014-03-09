@@ -10,14 +10,14 @@ class ProjectileWeapon : public fsn::Component
     FISSION_COMPONENT
 
     public:
-        ProjectileWeapon() : coolDown(0.1f), coolDownLeft(0.f), direction(1.f, 0.f), fireVelocity(400.f), attemptFire(false)
+        ProjectileWeapon() : coolDown(0.1f), coolDownLeft(0.f), direction(1.f, 0.f), fireSpeed(400.f), attemptFire(false)
         {
         }
 
         float coolDown;
         float coolDownLeft;
         sf::Vector2f direction;
-        float fireVelocity;
+        float fireSpeed;
         bool attemptFire;
 };
 
