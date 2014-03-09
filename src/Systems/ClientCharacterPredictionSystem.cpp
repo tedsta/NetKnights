@@ -148,5 +148,33 @@ void ClientCharacterPredictionSystem::setNewState(const fsn::EntityRef& entity, 
     // Put the entity at the new state
     entity.getComponent<fsn::Transform>().setPosition(state.position);
 
-    entity.getComponent<ProjectileWeapon>().attemptFire = state.firing;
+    auto& proj = entity.getComponent<ProjectileWeapon>();
+
+    if (state.up)
+    {
+        proj.direction.y = -1.f;
+    }
+    else if (state.down)
+    {
+        proj.direction.y = 1.f;
+    }
+    else
+    {
+        proj.direction.y = 0.f;
+    }
+
+    if (state.left)
+    {
+        proj.direction.x = -1.f;
+    }
+    else if (state.right)
+    {
+        proj.direction.x = 1.f;
+    }
+    else
+    {
+        proj.direction.x = 0.f;
+    }
+
+    proj.attemptFire = state.firing;
 }

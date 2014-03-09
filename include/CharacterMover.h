@@ -8,6 +8,11 @@
 struct CharacterState
 {
     sf::Vector2f position;
+
+    bool up;
+    bool down;
+    bool left;
+    bool right;
     bool firing;
 
     std::size_t sequence;
