@@ -6,6 +6,7 @@
 #include "EntityTags.h"
 
 #include "Components/Character.h"
+#include "Components/CharacterAnimation.h"
 #include "Components/HitBox.h"
 #include "Components/HitPoints.h"
 #include "Components/MeleeWeapon.h"
@@ -39,6 +40,7 @@ const fsn::EntityRef& PlayerManager::spawnPlayer(int netID)
     entity.addComponent<fsn::Transform>();
     entity.addComponent<fsn::Sprite>("Content/Textures/Characters/microknight.png", 40, 20);
     entity.addComponent<Character>();
+    entity.addComponent<CharacterAnimation>();
     entity.addComponent<HitBox>();
     entity.addComponent<HitPoints>();
     entity.addComponent<MeleeWeapon>();
@@ -46,6 +48,10 @@ const fsn::EntityRef& PlayerManager::spawnPlayer(int netID)
     entity.setTag(etags::Player);
     entity.getComponent<fsn::Transform>().setScale(2.f, 2.f);
     entity.getComponent<fsn::Sprite>().setFrameLoop(4, 6);
+
+    auto& anim = entity.getComponent<CharacterAnimation>();
+    anim.addAnimation("idle", FrameLoop(1, 1));
+    anim.addAnimation("walk", FrameLoop(4, 6));
 
     mPlayers.push_back(Player{mNextID++, netID, "Player", "password", entity});
 

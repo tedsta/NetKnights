@@ -70,6 +70,7 @@
 		<Unit filename="include/CharacterMover.h" />
 		<Unit filename="include/ClientNetworkLayer.h" />
 		<Unit filename="include/Components/Character.h" />
+		<Unit filename="include/Components/CharacterAnimation.h" />
 		<Unit filename="include/Components/HitBox.h" />
 		<Unit filename="include/Components/HitPoints.h" />
 		<Unit filename="include/Components/MeleeWeapon.h" />
@@ -87,6 +88,7 @@
 		<Unit filename="include/PacketTypes.h" />
 		<Unit filename="include/PlayerManager.h" />
 		<Unit filename="include/ServerNetworkLayer.h" />
+		<Unit filename="include/Systems/CharacterAnimationSystem.h" />
 		<Unit filename="include/Systems/ClientCharacterPredictionSystem.h" />
 		<Unit filename="include/Systems/MeleeWeaponSystem.h" />
 		<Unit filename="include/Systems/PlayerInputSystem.h" />
@@ -108,6 +110,7 @@
 		<Unit filename="src/GUI/Widgets/Window.cpp" />
 		<Unit filename="src/PlayerManager.cpp" />
 		<Unit filename="src/ServerNetworkLayer.cpp" />
+		<Unit filename="src/Systems/CharacterAnimationSystem.cpp" />
 		<Unit filename="src/Systems/ClientCharacterPredictionSystem.cpp" />
 		<Unit filename="src/Systems/MeleeWeaponSystem.cpp" />
 		<Unit filename="src/Systems/PlayerInputSystem.cpp" />

@@ -24,6 +24,7 @@
 #include "GUI/Widgets/Window.h"
 
 #include "Components/Character.h"
+#include "Components/CharacterAnimation.h"
 #include "Components/HitBox.h"
 #include "Components/HitPoints.h"
 #include "Components/MeleeWeapon.h"
@@ -34,6 +35,7 @@
 
 #include "Systems/ServerCharacterPredictionSystem.h"
 #include "Systems/ProjectileWeaponSystem.h"
+#include "Systems/CharacterAnimationSystem.h"
 #include "Systems/MeleeWeaponSystem.h"
 #include "Systems/VelocitySystem.h"
 
@@ -52,6 +54,7 @@ int main()
     fsn::ComponentTypeManager::add<fsn::Sprite>();
 
     fsn::ComponentTypeManager::add<Character>();
+    fsn::ComponentTypeManager::add<CharacterAnimation>();
     fsn::ComponentTypeManager::add<HitBox>();
     fsn::ComponentTypeManager::add<HitPoints>();
     fsn::ComponentTypeManager::add<MeleeWeapon>();
@@ -79,6 +82,7 @@ int main()
     fsn::SpriteRenderSystem spriteSys(entityMgr, &renderMgr);
     fsn::InputSystem inputSys(&renderMgr.getWindow());
     ServerCharacterPredictionSystem serverMoveSys(entityMgr, networkLayer);
+    CharacterAnimationSystem charAnimSys(entityMgr);
     ProjectileWeaponSystem projWeaponSys(entityMgr);
     MeleeWeaponSystem meleeWeaponSys(entityMgr);
     VelocitySystem velSys(entityMgr);
@@ -86,6 +90,7 @@ int main()
     engine.addSystem(spriteSys);
     engine.addSystem(inputSys);
     engine.addSystem(serverMoveSys);
+    engine.addSystem(charAnimSys);
     engine.addSystem(projWeaponSys);
     engine.addSystem(meleeWeaponSys);
     engine.addSystem(velSys);
