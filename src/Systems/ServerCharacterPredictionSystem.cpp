@@ -3,6 +3,7 @@
 #include <Fission/Rendering/Transform.h>
 
 #include "Components/ProjectileWeapon.h"
+#include "Components/MeleeWeapon.h"
 
 ServerCharacterPredictionSystem::ServerCharacterPredictionSystem(fsn::EntityManager& entityMgr, ServerNetworkLayer& networkLayer) :
     fsn::ComponentSystem(entityMgr), mNetworkLayer(networkLayer), mTick(0), mTicksBeforeInputUpdate(InputUpdateInterval)
@@ -109,7 +110,7 @@ void ServerCharacterPredictionSystem::setNewState(const fsn::EntityRef& entity, 
     // Put the entity at the new state
     entity.getComponent<fsn::Transform>().setPosition(state.position);
 
-    auto& proj = entity.getComponent<ProjectileWeapon>();
+    auto& proj = entity.getComponent<MeleeWeapon>();
 
     if (state.up)
     {
@@ -137,5 +138,5 @@ void ServerCharacterPredictionSystem::setNewState(const fsn::EntityRef& entity, 
         proj.direction.x = 0.f;
     }
 
-    proj.attemptFire = state.firing;
+    proj.attemptAttack = state.firing;
 }

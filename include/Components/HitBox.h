@@ -10,7 +10,17 @@ class HitBox : public fsn::Component
     FISSION_COMPONENT
 
     public:
-        HitBox() {}
+        HitBox() : rect(0.f, 0.f, 32.f, 32.f) {}
+
+        void serialize(fsn::Packet& packet)
+        {
+            packet << *this;
+        }
+
+        void deserialize(fsn::Packet& packet)
+        {
+            packet >> *this;
+        }
 
         sf::FloatRect rect;
 };

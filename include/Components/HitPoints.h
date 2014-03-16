@@ -10,6 +10,16 @@ class HitPoints : public fsn::Component
     public:
         HitPoints() {}
 
+        void serialize(fsn::Packet& packet)
+        {
+            packet << *this;
+        }
+
+        void deserialize(fsn::Packet& packet)
+        {
+            packet >> *this;
+        }
+
         int HP;
 };
 

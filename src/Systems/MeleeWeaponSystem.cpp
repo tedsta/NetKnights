@@ -3,30 +3,54 @@
 #include <Fission/Rendering/Transform.h>
 
 #include "Components/MeleeWeapon.h"
+#include "Components/HitBox.h"
+#include "Components/HitPoints.h"
 
 MeleeWeaponSystem::MeleeWeaponSystem(fsn::EntityManager& entityMgr) : fsn::ComponentSystem(entityMgr),
     mEntityManager(entityMgr)
 {
-    all<MeleeWeapon>();
+    all<fsn::Transform, MeleeWeapon>();
+
+    mHittableEntities.all<fsn::Transform, HitBox, HitPoints>();
+    entityMgr.addEntityObserver(&mHittableEntities);
 }
 
 void MeleeWeaponSystem::processEntity(const fsn::EntityRef& entity, const float dt)
 {
+    auto& weapTransform = entity.getComponent<fsn::Transform>();
     auto& weap = entity.getComponent<MeleeWeapon>();
 
-    /*if (weap.attemptAttack && weap.hitDelayLeft <= 0)
+    if (weap.attemptAttack && weap.hitDelayLeft <= 0)
     {
-        sf::Vector2f dir = weap.direction*weap.fireSpeed;
+        auto& hittables = mHittableEntities.getActiveEntities();
 
-        auto proj = mEntityManager.createEntityRef(mEntityManager.createEntity());
-        proj.addComponent<fsn::Transform>(entity.getComponent<fsn::Transform>().getPosition());
-        //proj.addComponent<HitBox>(dir.x, dir.y);
-        proj.addComponent<MeleeWeapon>();
+        for (auto& hittable : hittables)
+        {
+            if (hittable == entity)
+                continue;
+
+            auto& hTransform = hittable.getComponent<fsn::Transform>();
+            auto& hitBox = hittable.getComponent<HitBox>();
+            auto& hp = hittable.getComponent<HitPoints>();
+
+            sf::FloatRect hittableArea = hitBox.rect;
+            hittableArea.left += hTransform.getPosition().x;
+            hittableArea.top += hTransform.getPosition().y;
+
+            sf::FloatRect weapArea = weap.hitBox;
+            weapArea.left += weapTransform.getPosition().x;
+            weapArea.top += weapTransform.getPosition().y;
+
+            if (hittableArea.intersects(weapArea))
+            {
+                hp.HP -= weap.damage;
+            }
+        }
 
         weap.hitDelayLeft = weap.hitDelay;
     }
     else
     {
         weap.hitDelayLeft -= dt;
-    }*/
+    }
 }

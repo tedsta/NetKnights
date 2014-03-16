@@ -2,6 +2,7 @@
 #define MELEEWEAPONSYSTEM_H
 
 #include <Fission/Core/Systems/ComponentSystem.h>
+#include <Fission/Core/FilteredEntityBucket.h>
 
 class MeleeWeaponSystem : public fsn::ComponentSystem
 {
@@ -12,6 +13,8 @@ class MeleeWeaponSystem : public fsn::ComponentSystem
 
     private:
         fsn::EntityManager& mEntityManager;
+
+        fsn::FilteredEntityBucket mHittableEntities;
 };
 
 #endif // MELEEWEAPONSYSTEM_H

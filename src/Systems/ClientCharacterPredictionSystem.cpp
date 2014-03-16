@@ -6,6 +6,7 @@
 
 #include "Components/Character.h"
 #include "Components/ProjectileWeapon.h"
+#include "Components/MeleeWeapon.h"
 
 ClientCharacterPredictionSystem::ClientCharacterPredictionSystem(fsn::EntityManager& entityMgr) : fsn::ComponentSystem(entityMgr),
     mTick(0)
@@ -148,7 +149,7 @@ void ClientCharacterPredictionSystem::setNewState(const fsn::EntityRef& entity, 
     // Put the entity at the new state
     entity.getComponent<fsn::Transform>().setPosition(state.position);
 
-    auto& proj = entity.getComponent<ProjectileWeapon>();
+    auto& proj = entity.getComponent<MeleeWeapon>();
 
     if (state.up)
     {
@@ -176,5 +177,5 @@ void ClientCharacterPredictionSystem::setNewState(const fsn::EntityRef& entity, 
         proj.direction.x = 0.f;
     }
 
-    proj.attemptFire = state.firing;
+    proj.attemptAttack = state.firing;
 }
