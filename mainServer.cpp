@@ -24,6 +24,7 @@
 #include "GUI/Widgets/Window.h"
 
 #include "Components/Character.h"
+#include "Components/MeleeWeapon.h"
 #include "Components/Network.h"
 #include "Components/Projectile.h"
 #include "Components/ProjectileWeapon.h"
@@ -48,6 +49,7 @@ int main()
     fsn::ComponentTypeManager::add<fsn::Sprite>();
 
     fsn::ComponentTypeManager::add<Character>();
+    fsn::ComponentTypeManager::add<MeleeWeapon>();
     fsn::ComponentTypeManager::add<Network>();
     fsn::ComponentTypeManager::add<Projectile>();
     fsn::ComponentTypeManager::add<ProjectileWeapon>();
