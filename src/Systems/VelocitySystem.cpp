@@ -6,7 +6,7 @@
 
 VelocitySystem::VelocitySystem(fsn::EntityManager& entityMgr) : fsn::ComponentSystem(entityMgr)
 {
-    mAspect.all<fsn::Transform, Velocity>();
+    all<fsn::Transform, Velocity>();
 }
 
 void VelocitySystem::processEntity(const fsn::EntityRef& entity, const float dt)

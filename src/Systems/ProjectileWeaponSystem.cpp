@@ -10,7 +10,7 @@
 ProjectileWeaponSystem::ProjectileWeaponSystem(fsn::EntityManager& entityMgr) : fsn::ComponentSystem(entityMgr),
     mEntityManager(entityMgr)
 {
-    mAspect.all<ProjectileWeapon>();
+    all<ProjectileWeapon>();
 }
 
 void ProjectileWeaponSystem::processEntity(const fsn::EntityRef& entity, const float dt)

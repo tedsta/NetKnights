@@ -10,7 +10,7 @@
 ClientCharacterPredictionSystem::ClientCharacterPredictionSystem(fsn::EntityManager& entityMgr) : fsn::ComponentSystem(entityMgr),
     mTick(0)
 {
-    mAspect.all<fsn::Transform, Character>();
+   all<fsn::Transform, Character>();
 }
 
 void ClientCharacterPredictionSystem::processEntity(const fsn::EntityRef& entity, const float dt)
