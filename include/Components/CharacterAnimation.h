@@ -24,12 +24,32 @@ class CharacterAnimation : public fsn::Component
 
         void serialize(fsn::Packet& packet)
         {
-            packet << animations;
+            packet << std::size_t(animations.size());
+            for (auto& pair : animations)
+            {
+                packet << pair.first;
+                packet << pair.second;
+            }
         }
 
         void deserialize(fsn::Packet& packet)
         {
-            packet >> animations;
+            std::size_t animCount;
+            packet >> animCount;
+
+            for (std::size_t i = 0; i < animCount; i++)
+            {
+                std::string name;
+                FrameLoop frameLoop;
+
+                packet >> name;
+                packet >> frameLoop;
+
+                animations[name] = frameLoop;
+            }
+
+            if (animCount > 0)
+                curAnim = &animations.begin()->second;
         }
 
         void addAnimation(const std::string& name, const FrameLoop& frameLoop)

@@ -34,9 +34,10 @@
 #include "Components/Velocity.h"
 
 #include "Systems/ServerCharacterPredictionSystem.h"
-#include "Systems/ProjectileWeaponSystem.h"
 #include "Systems/CharacterAnimationSystem.h"
+#include "Systems/DeathSystem.h"
 #include "Systems/MeleeWeaponSystem.h"
+#include "Systems/ProjectileWeaponSystem.h"
 #include "Systems/VelocitySystem.h"
 
 #include "Events.h"
@@ -83,6 +84,7 @@ int main()
     fsn::InputSystem inputSys(&renderMgr.getWindow());
     ServerCharacterPredictionSystem serverMoveSys(entityMgr, networkLayer);
     CharacterAnimationSystem charAnimSys(entityMgr);
+    DeathSystem deathSys(entityMgr);
     ProjectileWeaponSystem projWeaponSys(entityMgr);
     MeleeWeaponSystem meleeWeaponSys(entityMgr);
     VelocitySystem velSys(entityMgr);
@@ -91,6 +93,7 @@ int main()
     engine.addSystem(inputSys);
     engine.addSystem(serverMoveSys);
     engine.addSystem(charAnimSys);
+    engine.addSystem(deathSys);
     engine.addSystem(projWeaponSys);
     engine.addSystem(meleeWeaponSys);
     engine.addSystem(velSys);

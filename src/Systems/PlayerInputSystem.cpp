@@ -72,6 +72,18 @@ bool PlayerInputSystem::onKeyPressed(sf::Keyboard::Key key)
             break;
         }
 
+        case sf::Keyboard::Key::LControl:
+        {
+            mInput.sequence++;
+            mInput.ticksSinceLastInput = mTick-mLastInputTick;
+            mLastInputTick = mTick;
+
+            mInput.dash = true;
+            mEventManager.fireEvent(CharacterInputEvent(mLocalPlayer, mInput));
+
+            break;
+        }
+
         default:
             break;
     }
@@ -134,6 +146,18 @@ bool PlayerInputSystem::onKeyReleased(sf::Keyboard::Key key)
             mLastInputTick = mTick;
 
             mInput.fire = false;
+            mEventManager.fireEvent(CharacterInputEvent(mLocalPlayer, mInput));
+
+            break;
+        }
+
+        case sf::Keyboard::Key::LControl:
+        {
+            mInput.sequence++;
+            mInput.ticksSinceLastInput = mTick-mLastInputTick;
+            mLastInputTick = mTick;
+
+            mInput.dash = false;
             mEventManager.fireEvent(CharacterInputEvent(mLocalPlayer, mInput));
 
             break;

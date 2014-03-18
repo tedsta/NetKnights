@@ -90,6 +90,7 @@
 		<Unit filename="include/ServerNetworkLayer.h" />
 		<Unit filename="include/Systems/CharacterAnimationSystem.h" />
 		<Unit filename="include/Systems/ClientCharacterPredictionSystem.h" />
+		<Unit filename="include/Systems/DeathSystem.h" />
 		<Unit filename="include/Systems/MeleeWeaponSystem.h" />
 		<Unit filename="include/Systems/PlayerInputSystem.h" />
 		<Unit filename="include/Systems/ProjectileWeaponSystem.h" />
@@ -112,6 +113,7 @@
 		<Unit filename="src/ServerNetworkLayer.cpp" />
 		<Unit filename="src/Systems/CharacterAnimationSystem.cpp" />
 		<Unit filename="src/Systems/ClientCharacterPredictionSystem.cpp" />
+		<Unit filename="src/Systems/DeathSystem.cpp" />
 		<Unit filename="src/Systems/MeleeWeaponSystem.cpp" />
 		<Unit filename="src/Systems/PlayerInputSystem.cpp" />
 		<Unit filename="src/Systems/ProjectileWeaponSystem.cpp" />

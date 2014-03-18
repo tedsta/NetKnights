@@ -35,6 +35,7 @@
 
 #include "Systems/CharacterAnimationSystem.h"
 #include "Systems/ClientCharacterPredictionSystem.h"
+#include "Systems/DeathSystem.h"
 #include "Systems/PlayerInputSystem.h"
 #include "Systems/ProjectileWeaponSystem.h"
 #include "Systems/MeleeWeaponSystem.h"
@@ -53,8 +54,8 @@ int main()
     fsn::ComponentTypeManager::add<fsn::Transform>();
     fsn::ComponentTypeManager::add<fsn::Sprite>();
 
-    fsn::ComponentTypeManager::add<CharacterAnimation>();
     fsn::ComponentTypeManager::add<Character>();
+    fsn::ComponentTypeManager::add<CharacterAnimation>();
     fsn::ComponentTypeManager::add<HitBox>();
     fsn::ComponentTypeManager::add<HitPoints>();
     fsn::ComponentTypeManager::add<MeleeWeapon>();
@@ -82,6 +83,7 @@ int main()
     PlayerInputSystem playerInputSys(eventMgr);
     ClientCharacterPredictionSystem clientMoveSys(entityMgr);
     CharacterAnimationSystem charAnimSys(entityMgr);
+    DeathSystem deathSys(entityMgr);
     ProjectileWeaponSystem projWeaponSys(entityMgr);
     MeleeWeaponSystem meleeWeaponSys(entityMgr);
     VelocitySystem velSys(entityMgr);
@@ -91,6 +93,7 @@ int main()
     engine.addSystem(playerInputSys);
     engine.addSystem(clientMoveSys);
     engine.addSystem(charAnimSys);
+    engine.addSystem(deathSys);
     engine.addSystem(projWeaponSys);
     engine.addSystem(meleeWeaponSys);
     engine.addSystem(velSys);

@@ -8,6 +8,8 @@
 #include "Events.h"
 #include "PacketTypes.h"
 
+#include "Components/CharacterAnimation.h"
+
 ClientNetworkLayer::ClientNetworkLayer(fsn::EventManager& eventMgr, fsn::EntityManager& entityMgr, fsn::Connection& conn) :
     mEventManager(eventMgr), mEntityManager(entityMgr), mConnection(conn)
 {
@@ -27,6 +29,9 @@ void ClientNetworkLayer::handlePacket(fsn::Packet& packet, int netID)
 
             packet >> netID;
             auto entity = mEntityManager.createEntityRef(mEntityManager.deserializeEntity(packet));
+
+            auto& anim = entity.getComponent<CharacterAnimation>();
+            anim.setAnimation("idle", true);
 
             if (netID == mConnection.getNetID())
             {

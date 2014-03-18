@@ -3,7 +3,9 @@
 #include <iostream>
 
 #include <Fission/Rendering/Transform.h>
+#include <Fission/Rendering/Sprite.h>
 
+#include "Components/CharacterAnimation.h"
 #include "Components/Character.h"
 #include "Components/ProjectileWeapon.h"
 #include "Components/MeleeWeapon.h"
@@ -147,35 +149,53 @@ void ClientCharacterPredictionSystem::setNewState(const fsn::EntityRef& entity, 
     states.back() = state;
 
     // Put the entity at the new state
-    entity.getComponent<fsn::Transform>().setPosition(state.position);
+    auto& transform = entity.getComponent<fsn::Transform>();
+    auto& sprite = entity.getComponent<fsn::Sprite>();
+    auto& charAnim = entity.getComponent<CharacterAnimation>();
+    auto& weap = entity.getComponent<MeleeWeapon>();
 
-    auto& proj = entity.getComponent<MeleeWeapon>();
+    transform.setPosition(state.position);
 
     if (state.up)
     {
-        proj.direction.y = -1.f;
+        weap.direction.y = -1.f;
     }
     else if (state.down)
     {
-        proj.direction.y = 1.f;
+        weap.direction.y = 1.f;
     }
     else
     {
-        proj.direction.y = 0.f;
+        weap.direction.y = 0.f;
     }
 
     if (state.left)
     {
-        proj.direction.x = -1.f;
+        transform.setScale(sf::Vector2f(-2.f, 2.f));
+        weap.direction.x = -1.f;
     }
     else if (state.right)
     {
-        proj.direction.x = 1.f;
+        transform.setScale(sf::Vector2f(2.f, 2.f));
+        weap.direction.x = 1.f;
     }
     else
     {
-        proj.direction.x = 0.f;
+        weap.direction.x = 0.f;
     }
 
-    proj.attemptAttack = state.firing;
+    weap.attemptAttack = state.firing;
+
+    if (state.firing)
+    {
+        charAnim.setAnimation("attack", true);
+    }
+    else if (state.moving)
+    {
+        charAnim.setAnimation("walk", true);
+    }
+    else
+    {
+        charAnim.setAnimation("idle", true);
+    }
 }

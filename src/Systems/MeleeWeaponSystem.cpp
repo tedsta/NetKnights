@@ -34,12 +34,12 @@ void MeleeWeaponSystem::processEntity(const fsn::EntityRef& entity, const float 
             auto& hp = hittable.getComponent<HitPoints>();
 
             sf::FloatRect hittableArea = hitBox.rect;
-            hittableArea.left += hTransform.getPosition().x;
-            hittableArea.top += hTransform.getPosition().y;
+            hittableArea.left += hTransform.getPosition().x-(hTransform.getOrigin().x*hTransform.getScale().x);
+            hittableArea.top += hTransform.getPosition().y-(hTransform.getOrigin().y*hTransform.getScale().y);
 
             sf::FloatRect weapArea = weap.hitBox;
-            weapArea.left += weapTransform.getPosition().x;
-            weapArea.top += weapTransform.getPosition().y;
+            weapArea.left += weapTransform.getPosition().x-(weapTransform.getOrigin().x*weapTransform.getScale().x);
+            weapArea.top += weapTransform.getPosition().y-(weapTransform.getOrigin().y*weapTransform.getScale().y);
 
             if (hittableArea.intersects(weapArea))
             {

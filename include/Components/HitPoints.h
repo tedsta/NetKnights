@@ -8,7 +8,7 @@ class HitPoints : public fsn::Component
     FISSION_COMPONENT
 
     public:
-        HitPoints() {}
+        HitPoints() : HP(100) {}
 
         void serialize(fsn::Packet& packet)
         {

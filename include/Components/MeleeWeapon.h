@@ -29,6 +29,7 @@ class MeleeWeapon : public fsn::Component
         float hitDelay;
         float hitDelayLeft;
         bool attemptAttack;
+        bool attacking;
 };
 
 #endif // MELEEWEAPON_H

@@ -46,12 +46,16 @@ const fsn::EntityRef& PlayerManager::spawnPlayer(int netID)
     entity.addComponent<MeleeWeapon>();
 
     entity.setTag(etags::Player);
+    entity.getComponent<fsn::Transform>().setOrigin(sf::Vector2f(16.f, 16.f));
     entity.getComponent<fsn::Transform>().setScale(2.f, 2.f);
     entity.getComponent<fsn::Sprite>().setFrameLoop(4, 6);
 
     auto& anim = entity.getComponent<CharacterAnimation>();
-    anim.addAnimation("idle", FrameLoop(1, 1));
+    anim.addAnimation("idle", FrameLoop(0, 0));
     anim.addAnimation("walk", FrameLoop(4, 6));
+    anim.addAnimation("attack", FrameLoop(1, 3));
+    anim.addAnimation("die", FrameLoop(18, 19));
+    anim.setAnimation("idle", true);
 
     mPlayers.push_back(Player{mNextID++, netID, "Player", "password", entity});
 
