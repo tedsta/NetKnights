@@ -100,7 +100,7 @@ struct CharacterAction
 class CharacterMover
 {
     public:
-        static CharacterState step(const CharacterState& initial, const CharacterInput& input);
+        static CharacterState step(const CharacterState& initial, const CharacterAction& action);
 };
 
 #endif // CHARACTERMOVER_H

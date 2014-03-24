@@ -15,7 +15,9 @@ void ClientCharacterPredictionSystem::processEntity(const fsn::EntityRef& entity
 
         if (!mInputs[entity.getID()].empty())
         {
-            mPredictedState = CharacterMover::step(mPredictedState, mInputs[entity.getID()].back().input); // Step player's physics
+            // Step player's physics
+            mPredictedState = CharacterMover::step(mPredictedState,
+                                                   createCharacterAction(entity, mPredictedState, mInputs[entity.getID()].back().input));
             setNewState(entity, mPredictedState);
         }
     }

@@ -57,7 +57,9 @@ void CharacterPredictionSystem::stepNonLocalCharacter(const fsn::EntityRef& enti
 
         if ((input.receivedLimit && input.ticksLeft > 0) || input.tick <= mTick-mStepDelay)
         {
-            auto newState = CharacterMover::step(mStates[entity.getID()].back(), input.input); // Step player's physics
+            // Step player's physics
+            auto newState = CharacterMover::step(mStates[entity.getID()].back(),
+                                                 createCharacterAction(entity, mStates[entity.getID()].back(), input.input));
             setNewState(entity, newState);
 
             input.ticksStepped++;
@@ -104,49 +106,72 @@ void CharacterPredictionSystem::addNonLocalInput(CharacterInputList& inputs, con
     inputs.push_back(CharacterInputAt(input, tick));
 }
 
-CharacterAction CharacterPredictionSystem::createCharacterAction(const fsn::EntityRef& entity, const CharacterInput& input)
+CharacterAction CharacterPredictionSystem::createCharacterAction(const fsn::EntityRef& entity, const CharacterState& state, const CharacterInput& input)
 {
     CharacterAction action;
 
     auto& stamina = entity.getComponent<Stamina>();
 
-    if (input.guard && stamina.getStamina() >= 50)
+    switch (state.moveState)
     {
-        action.guard = true;
-    }
-    else if (!input.up && !input.down && !input.left && !input.right && input.attack)
-    {
-        action.attack = true;
-    }
-    else
-    {
-        if (input.up)
+        case MoveState::Idle:
+        case MoveState::Walking:
         {
-            action.up = true;
-        }
-        else if (input.down)
-        {
-            action.down;
-        }
-
-        if (input.left)
-        {
-            action.left = true;
-
-            if (input.attack && stamina.takeStamina(25))
+            if (input.guard && stamina.getStamina() >= 50)
             {
-                action.dashAttack = true;
+                action.guard = true;
             }
-        }
-        else if (input.right)
-        {
-            action.left = true;
-
-            if (input.right && stamina.takeStamina(25))
+            else if (!input.up && !input.down && !input.left && !input.right && state.attackCoolDown == 0 && input.attack)
             {
-                action.dashAttack = true;
+                action.attack = true;
             }
+            else
+            {
+                if (input.up)
+                {
+                    action.up = true;
+                }
+                else if (input.down)
+                {
+                    action.down = true;
+                }
+
+                if (input.left)
+                {
+                    action.left = true;
+
+                    if (input.attack && state.attackCoolDown == 0 && stamina.takeStamina(25))
+                    {
+                        action.dashAttack = true;
+                    }
+                }
+                else if (input.right)
+                {
+                    action.right = true;
+
+                    if (input.attack && state.attackCoolDown == 0 && stamina.takeStamina(25))
+                    {
+                        std::cout << "Dash\n";
+                        action.dashAttack = true;
+                    }
+                }
+            }
+
+            break;
         }
+
+        case MoveState::Guarding:
+        {
+            if (input.guard && stamina.getStamina() >= 50)
+            {
+                action.guard = true;
+            }
+
+            break;
+        }
+
+        default:
+            break;
     }
 
     return action;

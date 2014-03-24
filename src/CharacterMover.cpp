@@ -2,13 +2,13 @@
 
 #include <iostream>
 
-CharacterState CharacterMover::step(const CharacterState& initial, const CharacterInput& input)
+CharacterState CharacterMover::step(const CharacterState& initial, const CharacterAction& action)
 {
     // Create the next state and set it to the current state
     CharacterState after = initial;
 
     // Set the new state's input sequence number
-    after.sequence = input.sequence;
+    after.sequence = action.sequence;
 
     // If there's an attack cooldown, decrement it
     if (after.attackCoolDown > 0)
@@ -19,42 +19,42 @@ CharacterState CharacterMover::step(const CharacterState& initial, const Charact
         case MoveState::Idle:
         case MoveState::Walking:
         {
-            if (!input.up && !input.down && !input.left && !input.right && !input.guard && !input.attack)
+            if (!action.up && !action.down && !action.left && !action.right && !action.guard && !action.attack && !action.dashAttack)
             {
                 after.moveState = MoveState::Idle;
                 break;
             }
 
             // Character wants to guard
-            if (input.guard)
+            if (action.guard)
             {
                 after.moveState = MoveState::Guarding;
                 break;
             }
 
             // Character is not moving and just wants to attack in place. Attack.
-            if (!input.up && !input.down && !input.left && !input.right && input.attack && initial.attackCoolDown == 0)
+            if (action.attack)
             {
                 after.moveState = MoveState::Attacking;
                 break;
             }
 
-            if (input.up)
+            if (action.up)
             {
                 after.position.y -= 0.75f;
                 after.moveState = MoveState::Walking;
             }
-            else if (input.down)
+            else if (action.down)
             {
                 after.position.y += 0.75f;
                 after.moveState = MoveState::Walking;
             }
 
-            if (input.left)
+            if (action.left)
             {
                 after.direction = Direction::Left;
 
-                if (input.attack && initial.attackCoolDown == 0)
+                if (action.dashAttack)
                 {
                     after.moveState = MoveState::DashingAttacking;
                     after.dashDirection = Direction::Left;
@@ -65,11 +65,11 @@ CharacterState CharacterMover::step(const CharacterState& initial, const Charact
                     after.moveState = MoveState::Walking;
                 }
             }
-            else if (input.right)
+            else if (action.right)
             {
                 after.direction = Direction::Right;
 
-                if (input.attack && initial.attackCoolDown == 0)
+                if (action.dashAttack)
                 {
                     after.moveState = MoveState::DashingAttacking;
                     after.dashDirection = Direction::Right;
@@ -87,7 +87,7 @@ CharacterState CharacterMover::step(const CharacterState& initial, const Charact
         case MoveState::Guarding:
         {
             // Character wants to stop guarding
-            if (!input.guard)
+            if (!action.guard)
             {
                 after.moveState = MoveState::Idle;
                 break;
@@ -101,7 +101,7 @@ CharacterState CharacterMover::step(const CharacterState& initial, const Charact
             if (initial.attackTimeLeft == 0)
             {
                 after.attackTimeLeft = 15;
-                after.attackCoolDown = 45;
+                after.attackCoolDown = 30;
                 after.moveState = MoveState::Idle;
 
                 break;
@@ -122,7 +122,7 @@ CharacterState CharacterMover::step(const CharacterState& initial, const Charact
                 // dashTimeLeft to full.
 
                 after.attackTimeLeft = 15;
-                after.attackCoolDown = 60;
+                after.attackCoolDown = 45;
                 after.moveState = MoveState::Idle;
 
                 break;

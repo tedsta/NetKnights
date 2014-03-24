@@ -51,7 +51,7 @@ class CharacterPredictionSystem : public fsn::ComponentSystem
     // Protected so our derived server and client character prediction systems can access all of the things
     protected:
         // Creates a character action from the player's intent (his input)
-        CharacterAction createCharacterAction(const fsn::EntityRef& entity, const CharacterInput& input);
+        CharacterAction createCharacterAction(const fsn::EntityRef& entity, const CharacterState& state, const CharacterInput& input);
 
         // Apply a character's state to its entity
         void setNewState(const fsn::EntityRef& entity, const CharacterState& state);
