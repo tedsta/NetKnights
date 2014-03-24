@@ -18,8 +18,10 @@
 #include "Components/CharacterAnimation.h"
 #include "Components/HitBox.h"
 #include "Components/HitPoints.h"
+#include "Components/KnightAI.h"
 #include "Components/MeleeWeapon.h"
 #include "Components/Stamina.h"
+#include "Components/Team.h"
 
 #include "Systems/CharacterAnimationSystem.h"
 #include "Systems/ClientCharacterPredictionSystem.h"
@@ -44,8 +46,10 @@ int main()
     fsn::ComponentTypeManager::add<CharacterAnimation>();
     fsn::ComponentTypeManager::add<HitBox>();
     fsn::ComponentTypeManager::add<HitPoints>();
+    fsn::ComponentTypeManager::add<KnightAI>();
     fsn::ComponentTypeManager::add<MeleeWeapon>();
     fsn::ComponentTypeManager::add<Stamina>();
+    fsn::ComponentTypeManager::add<Team>();
 
     // Setup the engine, render manager, and fake connection.
     fsn::Engine engine(1.f/60.f);
@@ -92,7 +96,7 @@ int main()
     eventMgr.addListener(&ClientNetworkLayer::onCharacterInput, networkLayer);
 
     // Connect
-    conn.connectClient("Teddy-PC", 54300);
+    conn.connectClient("localhost", 54300);
     networkLayer.login("player", "asdf");
 
     // Run the main loop.

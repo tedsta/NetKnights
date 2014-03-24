@@ -18,12 +18,15 @@
 #include "Components/CharacterAnimation.h"
 #include "Components/HitBox.h"
 #include "Components/HitPoints.h"
+#include "Components/KnightAI.h"
 #include "Components/MeleeWeapon.h"
 #include "Components/Stamina.h"
+#include "Components/Team.h"
 
 #include "Systems/CharacterAnimationSystem.h"
 #include "Systems/DeathSystem.h"
 #include "Systems/HPInvulnerabilitySystem.h"
+#include "Systems/KnightAISystem.h"
 #include "Systems/MeleeWeaponSystem.h"
 #include "Systems/ServerCharacterPredictionSystem.h"
 
@@ -31,6 +34,9 @@
 
 #include "PlayerManager.h"
 #include "ServerNetworkLayer.h"
+
+#include "AnimationEnums.h"
+#include "EntityTags.h"
 
 int main()
 {
@@ -45,8 +51,10 @@ int main()
     fsn::ComponentTypeManager::add<CharacterAnimation>();
     fsn::ComponentTypeManager::add<HitBox>();
     fsn::ComponentTypeManager::add<HitPoints>();
+    fsn::ComponentTypeManager::add<KnightAI>();
     fsn::ComponentTypeManager::add<MeleeWeapon>();
     fsn::ComponentTypeManager::add<Stamina>();
+    fsn::ComponentTypeManager::add<Team>();
 
     // Setup the engine, render manager, and fake connection.
     fsn::Engine engine(1.f/60.f);
@@ -71,6 +79,7 @@ int main()
     MeleeWeaponSystem meleeWeapSys(entityMgr);
     DeathSystem deathSys(entityMgr, eventMgr);
     HPInvulnerabilitySystem hpInvulSys(entityMgr);
+    KnightAISystem knightAISys(entityMgr, eventMgr);
 
     engine.addSystem(spriteSys);
     engine.addSystem(inputSys);
@@ -79,6 +88,7 @@ int main()
     engine.addSystem(meleeWeapSys);
     engine.addSystem(deathSys);
     engine.addSystem(hpInvulSys);
+    engine.addSystem(knightAISys);
 
     // Register everything with the EventManager
     eventMgr.addListener(&ServerCharacterPredictionSystem::onCharacterInput, charPredictSys);
@@ -90,6 +100,32 @@ int main()
 
     // Finally begin hosting the server
     conn.hostServer(54300);
+
+    //make test ai knight
+    auto entity = entityMgr.createEntityRef(entityMgr.createEntity(true));
+    entity.addComponent<fsn::Transform>(sf::Vector2f(500, 300));
+    entity.addComponent<fsn::Sprite>("Content/Textures/Characters/microknight.png", 40, 20);
+    entity.addComponent<CharacterAnimation>();
+    entity.addComponent<Character>();
+    entity.addComponent<HitBox>();
+    entity.addComponent<HitPoints>(100);
+    entity.addComponent<KnightAI>();
+    entity.addComponent<MeleeWeapon>();
+    entity.addComponent<Stamina>();
+    entity.addComponent<Team>();
+    entity.setTag(etags::Player);
+
+    auto& transform = entity.getComponent<fsn::Transform>();
+    transform.setOrigin(16.f, 16.f);
+    transform.setScale(2.f, 2.f);
+
+    auto& anim = entity.getComponent<CharacterAnimation>();
+    anim.addAnimation(KnightAnimation::Idle, FrameLoop(0, 0));
+    anim.addAnimation(KnightAnimation::Walk, FrameLoop(4, 6));
+    anim.addAnimation(KnightAnimation::Guard, FrameLoop(7, 7));
+    anim.addAnimation(KnightAnimation::Attack, FrameLoop(1, 3));
+    anim.addAnimation(KnightAnimation::Die, FrameLoop(18, 19));
+    anim.setAnimation(KnightAnimation::Idle);
 
     // Run the main loop.
     sf::Clock clock;

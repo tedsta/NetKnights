@@ -60,6 +60,16 @@ struct CharacterInput
     {
     }
 
+    bool sameAs(const CharacterInput& other)
+    {
+        if (up == other.up && down == other.down && left == other.left && right == other.right && guard == other.guard && attack == other.attack)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     // Controls
     bool up;
     bool down;

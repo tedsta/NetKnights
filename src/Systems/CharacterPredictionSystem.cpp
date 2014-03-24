@@ -31,7 +31,7 @@ void CharacterPredictionSystem::onEntityAdded(const fsn::EntityRef& entity)
     // Populate the state list with the initial entries
     for (auto& state : mStates[entity.getID()])
     {
-        state.stamina = entity.getComponent<Stamina>().stamina;
+        //state.stamina = entity.getComponent<Stamina>().stamina;
         state.position = entity.getComponent<fsn::Transform>().getPosition();
         state.sequence = 0;
     }

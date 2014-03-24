@@ -12,6 +12,7 @@
 #include "Components/HitPoints.h"
 #include "Components/MeleeWeapon.h"
 #include "Components/Stamina.h"
+#include "Components/Team.h"
 
 PlayerManager::PlayerManager(fsn::EntityManager& entityMgr) : mEntityManager(entityMgr)
 {
@@ -42,6 +43,7 @@ const fsn::EntityRef& PlayerManager::spawnPlayer(int netID)
     entity.addComponent<HitPoints>(100);
     entity.addComponent<MeleeWeapon>();
     entity.addComponent<Stamina>();
+    entity.addComponent<Team>();
     entity.setTag(etags::Player);
 
     auto& transform = entity.getComponent<fsn::Transform>();
