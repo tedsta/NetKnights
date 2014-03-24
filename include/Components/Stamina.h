@@ -8,7 +8,7 @@ class Stamina : public fsn::Component
     FISSION_COMPONENT
 
     public:
-        Stamina(std::size_t stamina = 100) : stamina(stamina)
+        Stamina(std::size_t stamina = 100) : mStamina(stamina)
         {
         }
 
@@ -22,7 +22,24 @@ class Stamina : public fsn::Component
             packet >> *this;
         }
 
-        std::size_t stamina;
+        bool takeStamina(std::size_t stamina)
+        {
+            if (mStamina >= stamina)
+            {
+                mStamina -= stamina;
+                return true;
+            }
+
+            return false;
+        }
+
+        std::size_t getStamina() const
+        {
+            return mStamina;
+        }
+
+        private:
+            std::size_t mStamina;
 };
 
 #endif // STAMINA_H

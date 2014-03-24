@@ -24,13 +24,10 @@ enum MoveState
 
 struct CharacterState
 {
-    CharacterState() : stamina(0), direction(Right), moveState(Idle), dashDirection(Right),
+    CharacterState() : direction(Right), moveState(Idle), dashDirection(Right),
         attackCoolDown(0), attackTimeLeft(15), sequence(0)
     {
     }
-
-    // Stats
-    std::size_t stamina;
 
     // Character's position
     sf::Vector2f position;
@@ -80,6 +77,24 @@ struct CharacterInput
 
     std::size_t sequence;            // Sequence number of this input for the character
     std::size_t ticksSinceLastInput; // Number of game ticks since last input
+};
+
+struct CharacterAction
+{
+    CharacterAction() : up(false), down(false), left(false), right(false), guard(false),
+        attack(false), dashAttack(false), sequence(0)
+    {
+    }
+
+    bool up;
+    bool down;
+    bool left;
+    bool right;
+    bool guard;
+    bool attack;
+    bool dashAttack;
+
+    std::size_t sequence; // Sequence number of this input for the character
 };
 
 class CharacterMover

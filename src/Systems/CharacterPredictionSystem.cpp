@@ -14,7 +14,7 @@
 CharacterPredictionSystem::CharacterPredictionSystem(fsn::EntityManager& entityMgr) : fsn::ComponentSystem(entityMgr),
     mStepDelay(10), mTick(0)
 {
-   all<fsn::Transform, Character>();
+   all<fsn::Transform, Character, CharacterAnimation, MeleeWeapon, Stamina>();
 }
 
 void CharacterPredictionSystem::end(const float dt)
@@ -31,7 +31,6 @@ void CharacterPredictionSystem::onEntityAdded(const fsn::EntityRef& entity)
     // Populate the state list with the initial entries
     for (auto& state : mStates[entity.getID()])
     {
-        //state.stamina = entity.getComponent<Stamina>().stamina;
         state.position = entity.getComponent<fsn::Transform>().getPosition();
         state.sequence = 0;
     }
@@ -105,6 +104,54 @@ void CharacterPredictionSystem::addNonLocalInput(CharacterInputList& inputs, con
     inputs.push_back(CharacterInputAt(input, tick));
 }
 
+CharacterAction CharacterPredictionSystem::createCharacterAction(const fsn::EntityRef& entity, const CharacterInput& input)
+{
+    CharacterAction action;
+
+    auto& stamina = entity.getComponent<Stamina>();
+
+    if (input.guard && stamina.getStamina() >= 50)
+    {
+        action.guard = true;
+    }
+    else if (!input.up && !input.down && !input.left && !input.right && input.attack)
+    {
+        action.attack = true;
+    }
+    else
+    {
+        if (input.up)
+        {
+            action.up = true;
+        }
+        else if (input.down)
+        {
+            action.down;
+        }
+
+        if (input.left)
+        {
+            action.left = true;
+
+            if (input.attack && stamina.takeStamina(25))
+            {
+                action.dashAttack = true;
+            }
+        }
+        else if (input.right)
+        {
+            action.left = true;
+
+            if (input.right && stamina.takeStamina(25))
+            {
+                action.dashAttack = true;
+            }
+        }
+    }
+
+    return action;
+}
+
 void CharacterPredictionSystem::setNewState(const fsn::EntityRef& entity, const CharacterState& state)
 {
     CharacterStateList& states = mStates[entity.getID()];
@@ -120,9 +167,6 @@ void CharacterPredictionSystem::setNewState(const fsn::EntityRef& entity, const 
     auto& transform = entity.getComponent<fsn::Transform>();
     auto& anim = entity.getComponent<CharacterAnimation>();
     auto& weap = entity.getComponent<MeleeWeapon>();
-    auto& stamina = entity.getComponent<Stamina>();
-
-    stamina.stamina = state.stamina;
 
     transform.setPosition(state.position);
 

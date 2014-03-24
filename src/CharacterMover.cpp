@@ -54,9 +54,8 @@ CharacterState CharacterMover::step(const CharacterState& initial, const Charact
             {
                 after.direction = Direction::Left;
 
-                if (input.attack && initial.attackCoolDown == 0 && initial.stamina >= 25)
+                if (input.attack && initial.attackCoolDown == 0)
                 {
-                    after.stamina -= 25;
                     after.moveState = MoveState::DashingAttacking;
                     after.dashDirection = Direction::Left;
                 }
@@ -70,9 +69,8 @@ CharacterState CharacterMover::step(const CharacterState& initial, const Charact
             {
                 after.direction = Direction::Right;
 
-                if (input.attack && initial.attackCoolDown == 0 && initial.stamina >= 25)
+                if (input.attack && initial.attackCoolDown == 0)
                 {
-                    after.stamina -= 25;
                     after.moveState = MoveState::DashingAttacking;
                     after.dashDirection = Direction::Right;
                 }
