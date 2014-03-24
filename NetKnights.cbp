@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="NetKnights" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="DebugServer">
+				<Option output="bin/DebugServer/NetKnightsServer" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin/DebugServer/" />
+				<Option object_output="obj/DebugServer/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="DebugClient">
+				<Option output="bin/DebugClient/NetKnights" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin/DebugClient/" />
+				<Option object_output="obj/DebugClient/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/NetKnights" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin/Release/" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<VirtualTargets>
+			<Add alias="DebugServerAndClient" targets="DebugServer;DebugClient;" />
+		</VirtualTargets>
+		<Compiler>
+			<Add option="-O3" />
+			<Add option="-std=c++11" />
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+			<Add option="-DWIN32" />
+			<Add option="-DNOGDI" />
+			<Add directory="include" />
+			<Add directory="extlibs/include" />
+			<Add directory="extlibs/include/Squirrel" />
+		</Compiler>
+		<Linker>
+			<Add library="extlibs\lib\libFission.a" />
+			<Add library="extlibs\lib\libsfml-audio.a" />
+			<Add library="extlibs\lib\libsfml-graphics.a" />
+			<Add library="extlibs\lib\libsfml-main.a" />
+			<Add library="extlibs\lib\libsfml-network.a" />
+			<Add library="extlibs\lib\libsfml-system.a" />
+			<Add library="extlibs\lib\libsfml-window.a" />
+			<Add library="extlibs\lib\libsqstdlib.a" />
+			<Add library="extlibs\lib\libsquirrel.a" />
+			<Add library="extlibs\lib\libUnitTest++.a" />
+			<Add library="extlibs\lib\libenet.a" />
+		</Linker>
+		<Unit filename="include/AnimationEnums.h" />
+		<Unit filename="include/CharacterMover.h" />
+		<Unit filename="include/ClientNetworkLayer.h" />
+		<Unit filename="include/Components/Character.h" />
+		<Unit filename="include/Components/CharacterAnimation.h" />
+		<Unit filename="include/Components/HitBox.h" />
+		<Unit filename="include/Components/HitPoints.h" />
+		<Unit filename="include/Components/MeleeWeapon.h" />
+		<Unit filename="include/Components/Stamina.h" />
+		<Unit filename="include/EntityTags.h" />
+		<Unit filename="include/Events.h" />
+		<Unit filename="include/PacketTypes.h" />
+		<Unit filename="include/PlayerManager.h" />
+		<Unit filename="include/ServerNetworkLayer.h" />
+		<Unit filename="include/Systems/CharacterAnimationSystem.h" />
+		<Unit filename="include/Systems/CharacterPredictionSystem.h" />
+		<Unit filename="include/Systems/ClientCharacterPredictionSystem.h" />
+		<Unit filename="include/Systems/DeathSystem.h" />
+		<Unit filename="include/Systems/HPInvulnerabilitySystem.h" />
+		<Unit filename="include/Systems/MeleeWeaponSystem.h" />
+		<Unit filename="include/Systems/PlayerInputSystem.h" />
+		<Unit filename="include/Systems/ServerCharacterPredictionSystem.h" />
+		<Unit filename="mainClient.cpp">
+			<Option target="DebugClient" />
+		</Unit>
+		<Unit filename="mainServer.cpp">
+			<Option target="DebugServer" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src/CharacterMover.cpp" />
+		<Unit filename="src/ClientNetworkLayer.cpp" />
+		<Unit filename="src/PlayerManager.cpp" />
+		<Unit filename="src/ServerNetworkLayer.cpp" />
+		<Unit filename="src/Systems/CharacterAnimationSystem.cpp" />
+		<Unit filename="src/Systems/CharacterPredictionSystem.cpp" />
+		<Unit filename="src/Systems/ClientCharacterPredictionSystem.cpp" />
+		<Unit filename="src/Systems/DeathSystem.cpp" />
+		<Unit filename="src/Systems/HPInvulnerabilitySystem.cpp" />
+		<Unit filename="src/Systems/MeleeWeaponSystem.cpp" />
+		<Unit filename="src/Systems/PlayerInputSystem.cpp" />
+		<Unit filename="src/Systems/ServerCharacterPredictionSystem.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+			<DoxyBlocks>
+				<comment_style block="0" line="0" />
+				<doxyfile_project />
+				<doxyfile_build />
+				<doxyfile_warnings />
+				<doxyfile_output />
+				<doxyfile_dot />
+				<general />
+			</DoxyBlocks>
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
