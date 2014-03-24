@@ -5,26 +5,58 @@
 
 #include <SFML/System/Vector2.hpp>
 
+enum Direction
+{
+    Up,
+    Down,
+    Left,
+    Right
+};
+
+enum MoveState
+{
+    Idle,
+    Walking,
+    Guarding,
+    Attacking,
+    DashingAttacking
+};
+
 struct CharacterState
 {
-    CharacterState() : moving(false), up(false), down(false), left(false), right(true), firing(false), sequence(0) {}
+    CharacterState() : stamina(0), direction(Right), moveState(Idle), dashDirection(Right),
+        attackCoolDown(0), attackTimeLeft(15), sequence(0)
+    {
+    }
 
+    // Stats
+    std::size_t stamina;
+
+    // Character's position
     sf::Vector2f position;
 
-    bool moving;
-    bool up;
-    bool down;
-    bool left;
-    bool right;
-    bool firing;
-    bool dashing;
+    // Facing direction
+    Direction direction;
 
+    // The character's movement state
+    MoveState moveState;
+
+    // Direction dashing in
+    Direction dashDirection;
+
+    // Time in ticks before next attack possible
+    std::size_t attackCoolDown;
+
+    // Time in ticks left for attack to complete
+    std::size_t attackTimeLeft;
+
+    // Sequence number of the input to obtain this state
     std::size_t sequence;
 };
 
 struct CharacterInput
 {
-    CharacterInput() : up(false), down(false), left(false), right(false), fire(false), sequence(0)
+    CharacterInput() : up(false), down(false), left(false), right(false), guard(false), attack(false), sequence(0)
     {
     }
 
@@ -33,9 +65,8 @@ struct CharacterInput
     bool down;
     bool left;
     bool right;
-
-    bool fire;
-    bool dash;
+    bool guard;
+    bool attack;
 
     std::size_t sequence;            // Sequence number of this input for the character
     std::size_t ticksSinceLastInput; // Number of game ticks since last input

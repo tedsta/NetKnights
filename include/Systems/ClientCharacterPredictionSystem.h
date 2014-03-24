@@ -1,27 +1,14 @@
-#ifndef CLIENTMOVEMENTPREDICTIONSYSTEM_H
-#define CLIENTMOVEMENTPREDICTIONSYSTEM_H
+#ifndef CLIENTCHARACTERPREDICTIONSYSTEM_H
+#define CLIENTCHARACTERPREDICTIONSYSTEM_H
 
-#include <array>
-#include <unordered_map>
-#include <vector>
+#include "Systems/CharacterPredictionSystem.h"
 
-#include <Fission/Core/Systems/ComponentSystem.h>
-
-#include "CharacterMover.h"
-#include "Events.h"
-
-class ClientCharacterPredictionSystem : public fsn::ComponentSystem
+class ClientCharacterPredictionSystem : public CharacterPredictionSystem
 {
-    static const std::size_t StepDelay = 10; // Number of ticks to delay non-local characters' states by
-
     public:
         ClientCharacterPredictionSystem(fsn::EntityManager& entityMgr);
 
         void processEntity(const fsn::EntityRef& entity, const float dt);
-        void end(const float dt);
-
-        void onEntityAdded(const fsn::EntityRef& entity);
-        void onEntityRemoved(const fsn::EntityRef& entity);
 
         // Called when the local player spawns
         void onLocalPlayerSpawned(const LocalPlayerSpawnedEvent& event);
@@ -29,41 +16,14 @@ class ClientCharacterPredictionSystem : public fsn::ComponentSystem
         // Called when a character applies input
         void onCharacterInput(const CharacterInputEvent& event);
 
-        // Called when a character state is received
-        void onCharacterState(const CharacterStateEvent& event);
-
     private:
-        void setNewState(const fsn::EntityRef& entity, const CharacterState& state);
-
-        struct CharacterInputAt
-        {
-            CharacterInputAt(){}
-
-            CharacterInputAt(const CharacterInput& input, std::size_t tick) :
-                input(input), tick(tick), ticksStepped(0), receivedLimit(false), ticksLeft(0)
-            {
-            }
-
-            CharacterInput input;
-            std::size_t tick;
-            std::size_t ticksStepped; // Number of times ticks input has been applied
-
-            bool receivedLimit;     // If we've received the end of this input
-            std::size_t ticksLeft;  // How many ticks left to apply the input
-        };
-
-        typedef std::array<CharacterState, 100> CharacterStateList;
-        typedef std::vector<CharacterInputAt> CharacterInputList;
-
+        // The client's local player
         fsn::EntityRef mLocalPlayer;
 
-        std::unordered_map<int, CharacterStateList> mStates;
-        std::unordered_map<int, CharacterInputList> mInputs;
-
+        // Predicted and authoritative states for local player. These will be useful later to
+        // interpolate between the predicted state and the corrected state to avoid jerkiness.
         CharacterState mPredictedState;
         CharacterState mAuthoritativeState;
-
-        std::size_t mTick;
 };
 
-#endif // CLIENTMOVEMENTPREDICTIONSYSTEM_H
+#endif // CLIENTCHARACTERPREDICTIONSYSTEM_H

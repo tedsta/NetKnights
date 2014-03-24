@@ -2,7 +2,7 @@
 #define CHARACTERANIMATION_H
 
 #include <array>
-#include <map>
+#include <unordered_map>
 #include <string>
 
 #include <Fission/Core/Component.h>
@@ -20,12 +20,15 @@ class CharacterAnimation : public fsn::Component
     FISSION_COMPONENT
 
     public:
-        CharacterAnimation() : curAnim(nullptr), loop(true) {}
+        CharacterAnimation() : mLoop(true) {}
 
         void serialize(fsn::Packet& packet)
         {
-            packet << std::size_t(animations.size());
-            for (auto& pair : animations)
+            packet << mCurrentAnimation;
+            packet << mLoop;
+
+            packet << static_cast<std::size_t>(mAnimations.size());
+            for (auto& pair : mAnimations)
             {
                 packet << pair.first;
                 packet << pair.second;
@@ -34,50 +37,59 @@ class CharacterAnimation : public fsn::Component
 
         void deserialize(fsn::Packet& packet)
         {
+            packet >> mCurrentAnimation;
+            packet >> mLoop;
+
             std::size_t animCount;
             packet >> animCount;
 
             for (std::size_t i = 0; i < animCount; i++)
             {
-                std::string name;
+                std::size_t anim;
                 FrameLoop frameLoop;
 
-                packet >> name;
+                packet >> anim;
                 packet >> frameLoop;
 
-                animations[name] = frameLoop;
+                mAnimations[anim] = frameLoop;
             }
-
-            if (animCount > 0)
-                curAnim = &animations.begin()->second;
         }
 
-        void addAnimation(const std::string& name, const FrameLoop& frameLoop)
+        void addAnimation(std::size_t anim, const FrameLoop& frameLoop)
         {
-            animations[name] = frameLoop;
+            // If there are no animations, make the current animation this first animation
+            if (mAnimations.size() == 0)
+                mCurrentAnimation = anim;
+
+            mAnimations[anim] = frameLoop;
         }
 
-        void setAnimation(const std::string& name, bool _loop)
+        void setAnimation(std::size_t anim, bool loop = true)
         {
-            curAnim = &animations[name];
-            loop = _loop;
+            mCurrentAnimation = anim;
+            mLoop = loop;
         }
 
-        FrameLoop& getCurrentAnimation()
+        std::size_t getCurrentAnimation() const
         {
-            return *curAnim;
+            return mCurrentAnimation;
+        }
+
+        const FrameLoop& getCurrentFrameLoop()
+        {
+            return mAnimations[mCurrentAnimation];
         }
 
         bool isLooping()
         {
-            return loop;
+            return mLoop;
         }
 
     private:
-        FrameLoop* curAnim;
-        bool loop;
+        std::size_t mCurrentAnimation;
+        bool mLoop;
 
-        std::map<std::string, FrameLoop> animations;
+        std::unordered_map<std::size_t, FrameLoop> mAnimations;
 };
 
 #endif // CHARACTERANIMATION_H

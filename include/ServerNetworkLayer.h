@@ -14,6 +14,8 @@ class ServerNetworkLayer : public fsn::IPacketHandler
 
         void handlePacket(fsn::Packet& packet, int netID);
 
+        void onCharacterDeath(const CharacterDeathEvent& event);
+
         void sendEntities(const std::vector<fsn::EntityRef>& entities, int netID = 0, int excludeID = 0);
         void sendCharacterInputs(const std::vector<CharacterInputEvent>& inputs, int netID = 0, int excludeID = 0);
 

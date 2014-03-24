@@ -1,9 +1,5 @@
 #include <sstream>
 
-#include <SFML/Window/Event.hpp>
-#include <SFML/Graphics/Texture.hpp>
-#include <SFML/Graphics/RectangleShape.hpp>
-
 #include <Fission/Core/Engine.h>
 #include <Fission/Core/EntityManager.h>
 #include <Fission/Core/ResourceManager.h>
@@ -18,27 +14,18 @@
 
 #include <Fission/Network/Connection.h>
 
-#include "GUI/GUIManager.h"
-#include "GUI/Widgets/Button.h"
-#include "GUI/Widgets/RenderArea.h"
-#include "GUI/Widgets/Window.h"
-
 #include "Components/Character.h"
 #include "Components/CharacterAnimation.h"
 #include "Components/HitBox.h"
 #include "Components/HitPoints.h"
 #include "Components/MeleeWeapon.h"
-#include "Components/Network.h"
-#include "Components/Projectile.h"
-#include "Components/ProjectileWeapon.h"
-#include "Components/Velocity.h"
+#include "Components/Stamina.h"
 
-#include "Systems/ServerCharacterPredictionSystem.h"
 #include "Systems/CharacterAnimationSystem.h"
 #include "Systems/DeathSystem.h"
+#include "Systems/HPInvulnerabilitySystem.h"
 #include "Systems/MeleeWeaponSystem.h"
-#include "Systems/ProjectileWeaponSystem.h"
-#include "Systems/VelocitySystem.h"
+#include "Systems/ServerCharacterPredictionSystem.h"
 
 #include "Events.h"
 
@@ -59,10 +46,7 @@ int main()
     fsn::ComponentTypeManager::add<HitBox>();
     fsn::ComponentTypeManager::add<HitPoints>();
     fsn::ComponentTypeManager::add<MeleeWeapon>();
-    fsn::ComponentTypeManager::add<Network>();
-    fsn::ComponentTypeManager::add<Projectile>();
-    fsn::ComponentTypeManager::add<ProjectileWeapon>();
-    fsn::ComponentTypeManager::add<Velocity>();
+    fsn::ComponentTypeManager::add<Stamina>();
 
     // Setup the engine, render manager, and fake connection.
     fsn::Engine engine(1.f/60.f);
@@ -82,24 +66,24 @@ int main()
     // Setup our systems - only the input systems for now
     fsn::SpriteRenderSystem spriteSys(entityMgr, &renderMgr);
     fsn::InputSystem inputSys(&renderMgr.getWindow());
-    ServerCharacterPredictionSystem serverMoveSys(entityMgr, networkLayer);
+    ServerCharacterPredictionSystem charPredictSys(entityMgr, networkLayer);
     CharacterAnimationSystem charAnimSys(entityMgr);
-    DeathSystem deathSys(entityMgr);
-    ProjectileWeaponSystem projWeaponSys(entityMgr);
-    MeleeWeaponSystem meleeWeaponSys(entityMgr);
-    VelocitySystem velSys(entityMgr);
+    MeleeWeaponSystem meleeWeapSys(entityMgr);
+    DeathSystem deathSys(entityMgr, eventMgr);
+    HPInvulnerabilitySystem hpInvulSys(entityMgr);
 
     engine.addSystem(spriteSys);
     engine.addSystem(inputSys);
-    engine.addSystem(serverMoveSys);
+    engine.addSystem(charPredictSys);
     engine.addSystem(charAnimSys);
+    engine.addSystem(meleeWeapSys);
     engine.addSystem(deathSys);
-    engine.addSystem(projWeaponSys);
-    engine.addSystem(meleeWeaponSys);
-    engine.addSystem(velSys);
+    engine.addSystem(hpInvulSys);
 
     // Register everything with the EventManager
-    eventMgr.addListener(&ServerCharacterPredictionSystem::onCharacterInput, serverMoveSys);
+    eventMgr.addListener(&ServerCharacterPredictionSystem::onCharacterInput, charPredictSys);
+
+    eventMgr.addListener(&ServerNetworkLayer::onCharacterDeath, networkLayer);
 
     // Register network handlers
     conn.registerHandler(0, &networkLayer);

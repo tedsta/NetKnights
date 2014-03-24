@@ -67,6 +67,15 @@ void ServerNetworkLayer::handlePacket(fsn::Packet& packet, int netID)
     }
 }
 
+void ServerNetworkLayer::onCharacterDeath(const CharacterDeathEvent& event)
+{
+    fsn::Packet packet;
+    packet << PacketID(CharacterDied);
+    packet << event.characterEntity.getUniqueID();
+
+    mConnection.send(packet, getHndID());
+}
+
 void ServerNetworkLayer::sendEntities(const std::vector<fsn::EntityRef>& entities, int netID, int excludeID)
 {
     fsn::Packet packet;

@@ -3,6 +3,7 @@
 #include <Fission/Rendering/Transform.h>
 #include <Fission/Rendering/Sprite.h>
 
+#include "AnimationEnums.h"
 #include "EntityTags.h"
 
 #include "Components/Character.h"
@@ -10,23 +11,19 @@
 #include "Components/HitBox.h"
 #include "Components/HitPoints.h"
 #include "Components/MeleeWeapon.h"
-#include "Components/ProjectileWeapon.h"
+#include "Components/Stamina.h"
 
 PlayerManager::PlayerManager(fsn::EntityManager& entityMgr) : mEntityManager(entityMgr)
 {
     //ctor
 }
 
-bool PlayerManager::login(const std::string& name, const std::string& pass, int netID)
+bool PlayerManager::login(const std::string& name, int netID)
 {
     Player* player = findPlayerByName(name);
 
     // Error - player doesn't exist
     if (!player)
-        return false;
-
-    // Incorrected password
-    if (player->pass != pass)
         return false;
 
     player->netID = netID;
@@ -39,25 +36,27 @@ const fsn::EntityRef& PlayerManager::spawnPlayer(int netID)
     auto entity = mEntityManager.createEntityRef(mEntityManager.createEntity(true));
     entity.addComponent<fsn::Transform>();
     entity.addComponent<fsn::Sprite>("Content/Textures/Characters/microknight.png", 40, 20);
-    entity.addComponent<Character>();
     entity.addComponent<CharacterAnimation>();
+    entity.addComponent<Character>();
     entity.addComponent<HitBox>();
-    entity.addComponent<HitPoints>();
+    entity.addComponent<HitPoints>(100);
     entity.addComponent<MeleeWeapon>();
-
+    entity.addComponent<Stamina>();
     entity.setTag(etags::Player);
-    entity.getComponent<fsn::Transform>().setOrigin(sf::Vector2f(16.f, 16.f));
-    entity.getComponent<fsn::Transform>().setScale(2.f, 2.f);
-    entity.getComponent<fsn::Sprite>().setFrameLoop(4, 6);
+
+    auto& transform = entity.getComponent<fsn::Transform>();
+    transform.setOrigin(16.f, 16.f);
+    transform.setScale(2.f, 2.f);
 
     auto& anim = entity.getComponent<CharacterAnimation>();
-    anim.addAnimation("idle", FrameLoop(0, 0));
-    anim.addAnimation("walk", FrameLoop(4, 6));
-    anim.addAnimation("attack", FrameLoop(1, 3));
-    anim.addAnimation("die", FrameLoop(18, 19));
-    anim.setAnimation("idle", true);
+    anim.addAnimation(KnightAnimation::Idle, FrameLoop(0, 0));
+    anim.addAnimation(KnightAnimation::Walk, FrameLoop(4, 6));
+    anim.addAnimation(KnightAnimation::Guard, FrameLoop(7, 7));
+    anim.addAnimation(KnightAnimation::Attack, FrameLoop(1, 3));
+    anim.addAnimation(KnightAnimation::Die, FrameLoop(18, 19));
+    anim.setAnimation(KnightAnimation::Idle);
 
-    mPlayers.push_back(Player{mNextID++, netID, "Player", "password", entity});
+    mPlayers.push_back(Player{mNextID++, netID, "Player", entity});
 
     return mPlayers.back().entity;
 }

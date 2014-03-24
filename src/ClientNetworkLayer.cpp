@@ -5,10 +5,14 @@
 #include <Fission/Core/EntityRef.h>
 #include <Fission/Rendering/Sprite.h>
 
+#include "Components/Character.h"
+#include "Components/CharacterAnimation.h"
+#include "Components/HitPoints.h"
+#include "Components/MeleeWeapon.h"
+
+#include "AnimationEnums.h"
 #include "Events.h"
 #include "PacketTypes.h"
-
-#include "Components/CharacterAnimation.h"
 
 ClientNetworkLayer::ClientNetworkLayer(fsn::EventManager& eventMgr, fsn::EntityManager& entityMgr, fsn::Connection& conn) :
     mEventManager(eventMgr), mEntityManager(entityMgr), mConnection(conn)
@@ -30,13 +34,32 @@ void ClientNetworkLayer::handlePacket(fsn::Packet& packet, int netID)
             packet >> netID;
             auto entity = mEntityManager.createEntityRef(mEntityManager.deserializeEntity(packet));
 
-            auto& anim = entity.getComponent<CharacterAnimation>();
-            anim.setAnimation("idle", true);
-
             if (netID == mConnection.getNetID())
             {
                 mLocalEntity = entity;
                 mEventManager.fireEvent(LocalPlayerSpawnedEvent(entity));
+            }
+
+            break;
+        }
+
+        case CharacterDied:
+        {
+            std::size_t entityUniqueID;
+            packet >> entityUniqueID;
+
+            auto entity = mEntityManager.createEntityRef(mEntityManager.getEntityIDFromUniqueID(entityUniqueID));
+
+            if (entity.exists())
+            {
+                // Remove alive character part of entity
+                entity.removeComponent<Character>();
+                entity.removeComponent<HitPoints>();
+                entity.removeComponent<MeleeWeapon>();
+
+                // Apply death animation
+                auto& anim = entity.getComponent<CharacterAnimation>();
+                anim.setAnimation(KnightAnimation::Die, false);
             }
 
             break;

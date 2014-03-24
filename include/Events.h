@@ -53,4 +53,14 @@ struct CharacterStateEvent : public fsn::EventData
     CharacterState state;
 };
 
+struct CharacterDeathEvent : public fsn::EventData
+{
+    CharacterDeathEvent(const fsn::EntityRef& characterEntity) :
+        characterEntity(characterEntity)
+    {
+    }
+
+    fsn::EntityRef characterEntity;
+};
+
 #endif // MONSTER_HUNTER_EVENTS_H_INCLUDED

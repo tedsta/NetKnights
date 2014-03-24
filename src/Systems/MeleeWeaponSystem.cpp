@@ -20,7 +20,7 @@ void MeleeWeaponSystem::processEntity(const fsn::EntityRef& entity, const float 
     auto& weapTransform = entity.getComponent<fsn::Transform>();
     auto& weap = entity.getComponent<MeleeWeapon>();
 
-    if (weap.attemptAttack && weap.hitDelayLeft <= 0)
+    if (weap.attack && weap.attackDurationLeft > 0)
     {
         auto& hittables = mHittableEntities.getActiveEntities();
 
@@ -34,23 +34,24 @@ void MeleeWeaponSystem::processEntity(const fsn::EntityRef& entity, const float 
             auto& hp = hittable.getComponent<HitPoints>();
 
             sf::FloatRect hittableArea = hitBox.rect;
-            hittableArea.left += hTransform.getPosition().x-(hTransform.getOrigin().x*hTransform.getScale().x);
-            hittableArea.top += hTransform.getPosition().y-(hTransform.getOrigin().y*hTransform.getScale().y);
+            hittableArea.left += hTransform.getPosition().x;
+            hittableArea.top += hTransform.getPosition().y;
 
             sf::FloatRect weapArea = weap.hitBox;
-            weapArea.left += weapTransform.getPosition().x-(weapTransform.getOrigin().x*weapTransform.getScale().x);
-            weapArea.top += weapTransform.getPosition().y-(weapTransform.getOrigin().y*weapTransform.getScale().y);
+            weapArea.left += weapTransform.getPosition().x;
+            weapArea.top += weapTransform.getPosition().y;
 
             if (hittableArea.intersects(weapArea))
             {
-                hp.HP -= weap.damage;
+                hp.damage(weap.damage, 30, entity);
             }
         }
 
-        weap.hitDelayLeft = weap.hitDelay;
+        weap.attackDurationLeft--;
     }
     else
     {
-        weap.hitDelayLeft -= dt;
+        weap.attackDurationLeft = weap.attackDuration;
+        weap.attack = false;
     }
 }

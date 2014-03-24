@@ -1,9 +1,5 @@
 #include <sstream>
 
-#include <SFML/Window/Event.hpp>
-#include <SFML/Graphics/Texture.hpp>
-#include <SFML/Graphics/RectangleShape.hpp>
-
 #include <Fission/Core/Engine.h>
 #include <Fission/Core/EntityManager.h>
 #include <Fission/Core/ResourceManager.h>
@@ -18,28 +14,18 @@
 
 #include <Fission/Network/Connection.h>
 
-#include "GUI/GUIManager.h"
-#include "GUI/Widgets/Button.h"
-#include "GUI/Widgets/RenderArea.h"
-#include "GUI/Widgets/Window.h"
-
 #include "Components/Character.h"
 #include "Components/CharacterAnimation.h"
 #include "Components/HitBox.h"
 #include "Components/HitPoints.h"
 #include "Components/MeleeWeapon.h"
-#include "Components/Network.h"
-#include "Components/Projectile.h"
-#include "Components/ProjectileWeapon.h"
-#include "Components/Velocity.h"
+#include "Components/Stamina.h"
 
 #include "Systems/CharacterAnimationSystem.h"
 #include "Systems/ClientCharacterPredictionSystem.h"
-#include "Systems/DeathSystem.h"
-#include "Systems/PlayerInputSystem.h"
-#include "Systems/ProjectileWeaponSystem.h"
+#include "Systems/HPInvulnerabilitySystem.h"
 #include "Systems/MeleeWeaponSystem.h"
-#include "Systems/VelocitySystem.h"
+#include "Systems/PlayerInputSystem.h"
 
 #include "Events.h"
 
@@ -59,10 +45,7 @@ int main()
     fsn::ComponentTypeManager::add<HitBox>();
     fsn::ComponentTypeManager::add<HitPoints>();
     fsn::ComponentTypeManager::add<MeleeWeapon>();
-    fsn::ComponentTypeManager::add<Network>();
-    fsn::ComponentTypeManager::add<Projectile>();
-    fsn::ComponentTypeManager::add<ProjectileWeapon>();
-    fsn::ComponentTypeManager::add<Velocity>();
+    fsn::ComponentTypeManager::add<Stamina>();
 
     // Setup the engine, render manager, and fake connection.
     fsn::Engine engine(1.f/60.f);
@@ -71,32 +54,25 @@ int main()
 
     fsn::RenderManager renderMgr(800, 600, "Monster Hunter", 5, fsn::ResourceManager::get()->getFont("Content/Fonts/font.ttf"));
     fsn::Connection conn(eventMgr);
-    gui::GUIManager guiMgr(renderMgr.getWindow().getSize().x, renderMgr.getWindow().getSize().y);
 
     renderMgr.getWindow().setKeyRepeatEnabled(false);
-
-    renderMgr.addOverlay(&guiMgr);
 
     // Setup our systems - only the input systems for now
     fsn::SpriteRenderSystem spriteSys(entityMgr, &renderMgr);
     fsn::InputSystem inputSys(&renderMgr.getWindow());
     PlayerInputSystem playerInputSys(eventMgr);
-    ClientCharacterPredictionSystem clientMoveSys(entityMgr);
+    ClientCharacterPredictionSystem charPredictSys(entityMgr);
     CharacterAnimationSystem charAnimSys(entityMgr);
-    DeathSystem deathSys(entityMgr);
-    ProjectileWeaponSystem projWeaponSys(entityMgr);
-    MeleeWeaponSystem meleeWeaponSys(entityMgr);
-    VelocitySystem velSys(entityMgr);
+    MeleeWeaponSystem meleeWeapSys(entityMgr);
+    HPInvulnerabilitySystem hpInvulSys(entityMgr);
 
     engine.addSystem(spriteSys);
     engine.addSystem(inputSys);
     engine.addSystem(playerInputSys);
-    engine.addSystem(clientMoveSys);
+    engine.addSystem(charPredictSys);
     engine.addSystem(charAnimSys);
-    engine.addSystem(deathSys);
-    engine.addSystem(projWeaponSys);
-    engine.addSystem(meleeWeaponSys);
-    engine.addSystem(velSys);
+    engine.addSystem(meleeWeapSys);
+    engine.addSystem(hpInvulSys);
 
     // Game specific manager type stuff
     ClientNetworkLayer networkLayer(eventMgr, entityMgr, conn);
@@ -105,30 +81,18 @@ int main()
     conn.registerHandler(0, &networkLayer);
 
     // Input listeners
-    //inputSys.addKeyboardListener(&guiMgr);
-    inputSys.addMouseListener(&guiMgr);
     inputSys.addKeyboardListener(&playerInputSys);
 
     // Register everything with the EventManager
     eventMgr.addListener(&PlayerInputSystem::onLocalPlayerSpawned, playerInputSys);
 
-    eventMgr.addListener(&ClientCharacterPredictionSystem::onLocalPlayerSpawned, clientMoveSys);
-    eventMgr.addListener(&ClientCharacterPredictionSystem::onCharacterInput, clientMoveSys);
-    eventMgr.addListener(&ClientCharacterPredictionSystem::onCharacterState, clientMoveSys);
+    eventMgr.addListener(&ClientCharacterPredictionSystem::onLocalPlayerSpawned, charPredictSys);
+    eventMgr.addListener(&ClientCharacterPredictionSystem::onCharacterInput, charPredictSys);
 
     eventMgr.addListener(&ClientNetworkLayer::onCharacterInput, networkLayer);
 
-    // Make a window
-    gui::Window window(128, 100);
-    window.setPosition(sf::Vector2i(100, 200));
-    guiMgr.getRoot().addChild(&window);
-
-    gui::Button button;
-    button.setPosition(sf::Vector2i(10, 10));
-    window.addChild(&button);
-
     // Connect
-    conn.connectClient("localhost", 54300);
+    conn.connectClient("Teddy-PC", 54300);
     networkLayer.login("player", "asdf");
 
     // Run the main loop.

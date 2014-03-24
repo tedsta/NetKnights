@@ -11,7 +11,7 @@ class MeleeWeapon : public fsn::Component
     FISSION_COMPONENT
 
     public:
-        MeleeWeapon() : hitBox(0.f, 0.f, 32.f, 32.f), direction(1, 0), damage(25), hitDelay(0.1), hitDelayLeft(hitDelay), attemptAttack(false) {}
+        MeleeWeapon() : hitBox(0.f, 0.f, 32.f, 32.f), direction(1, 0), damage(25), attackDuration(15), attackDurationLeft(attackDuration), attack(false) {}
 
         void serialize(fsn::Packet& packet)
         {
@@ -26,10 +26,9 @@ class MeleeWeapon : public fsn::Component
         sf::FloatRect hitBox;
         sf::Vector2f direction;
         int damage;
-        float hitDelay;
-        float hitDelayLeft;
-        bool attemptAttack;
-        bool attacking;
+        std::size_t attackDuration; // Attack duration in ticks
+        std::size_t attackDurationLeft; // Attack duration left in ticks
+        bool attack;
 };
 
 #endif // MELEEWEAPON_H

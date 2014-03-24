@@ -12,7 +12,6 @@ struct Player
     std::size_t ID;
     int netID;
     std::string name;
-    std::string pass;
     fsn::EntityRef entity;
 };
 
@@ -21,7 +20,7 @@ class PlayerManager
     public:
         PlayerManager(fsn::EntityManager& entityMgr);
 
-        bool login(const std::string& name, const std::string& pass, int netID);
+        bool login(const std::string& name, int netID);
 
         const fsn::EntityRef& spawnPlayer(int netID);
 

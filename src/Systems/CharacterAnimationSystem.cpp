@@ -14,6 +14,6 @@ void CharacterAnimationSystem::processEntity(const fsn::EntityRef& entity, const
     auto& sprite = entity.getComponent<fsn::Sprite>();
     auto& charAnim = entity.getComponent<CharacterAnimation>();
 
-    sprite.setFrameLoop(charAnim.getCurrentAnimation().start, charAnim.getCurrentAnimation().stop);
+    sprite.setFrameLoop(charAnim.getCurrentFrameLoop().start, charAnim.getCurrentFrameLoop().stop);
     sprite.setLoopAnim(charAnim.isLooping());
 }

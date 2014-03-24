@@ -5,6 +5,7 @@ enum
 {
     Login,
     CharacterSpawned,
+    CharacterDied,
     PlayerInputed,
     CharacterInputs,
     CreateEntities

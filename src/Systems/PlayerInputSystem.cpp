@@ -1,7 +1,5 @@
 #include "Systems/PlayerInputSystem.h"
 
-#include "Components/ProjectileWeapon.h"
-
 PlayerInputSystem::PlayerInputSystem(fsn::EventManager& eventMgr) : mEventManager(eventMgr), mTick(0), mLastInputTick(0)
 {
     //ctor
@@ -66,21 +64,19 @@ bool PlayerInputSystem::onKeyPressed(sf::Keyboard::Key key)
             mInput.ticksSinceLastInput = mTick-mLastInputTick;
             mLastInputTick = mTick;
 
-            mInput.fire = true;
+            mInput.guard = true;
             mEventManager.fireEvent(CharacterInputEvent(mLocalPlayer, mInput));
-
             break;
         }
 
-        case sf::Keyboard::Key::LControl:
+        case sf::Keyboard::Key::Return:
         {
             mInput.sequence++;
             mInput.ticksSinceLastInput = mTick-mLastInputTick;
             mLastInputTick = mTick;
 
-            mInput.dash = true;
+            mInput.attack = true;
             mEventManager.fireEvent(CharacterInputEvent(mLocalPlayer, mInput));
-
             break;
         }
 
@@ -145,21 +141,19 @@ bool PlayerInputSystem::onKeyReleased(sf::Keyboard::Key key)
             mInput.ticksSinceLastInput = mTick-mLastInputTick;
             mLastInputTick = mTick;
 
-            mInput.fire = false;
+            mInput.guard = false;
             mEventManager.fireEvent(CharacterInputEvent(mLocalPlayer, mInput));
-
             break;
         }
 
-        case sf::Keyboard::Key::LControl:
+        case sf::Keyboard::Key::Return:
         {
             mInput.sequence++;
             mInput.ticksSinceLastInput = mTick-mLastInputTick;
             mLastInputTick = mTick;
 
-            mInput.dash = false;
+            mInput.attack = false;
             mEventManager.fireEvent(CharacterInputEvent(mLocalPlayer, mInput));
-
             break;
         }
 
