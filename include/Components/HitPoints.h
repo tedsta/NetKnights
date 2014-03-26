@@ -24,18 +24,31 @@ class HitPoints : public fsn::Component
             packet >> *this;
         }
 
-        void damage(int damage, std::size_t damageCoolDown = 0, const fsn::EntityRef& damager = fsn::EntityRef())
+        bool canDamage(const fsn::EntityRef& damager)
         {
-            // Break out if there's an invulnerability protection
             for (auto& dmg : mDamagers)
             {
                 if (dmg.entity == damager)
-                    return;
+                    return false;
             }
 
+            return true;
+        }
+
+        void damage(int damage, std::size_t damageCoolDown = 0, const fsn::EntityRef& damager = fsn::EntityRef())
+        {
+            // Break out if there's an invulnerability protection
+            if (damager.exists() && !canDamage(damager))
+                return;
+
             mHP -= damage;
-            if (damageCoolDown > 0)
-                mDamagers.push_back(Damager{damager, damageCoolDown});
+            if (damageCoolDown > 0 && damager.exists())
+                addInvulnerability(damageCoolDown, damager);
+        }
+
+        void addInvulnerability(std::size_t damageCoolDown, const fsn::EntityRef& damager)
+        {
+            mDamagers.push_back(Damager{damager, damageCoolDown});
         }
 
         int getHP() const {return mHP;}

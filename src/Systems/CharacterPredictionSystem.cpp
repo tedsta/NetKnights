@@ -9,12 +9,13 @@
 #include "Components/Character.h"
 #include "Components/CharacterAnimation.h"
 #include "Components/MeleeWeapon.h"
+#include "Components/Shield.h"
 #include "Components/Stamina.h"
 
 CharacterPredictionSystem::CharacterPredictionSystem(fsn::EntityManager& entityMgr) : fsn::ComponentSystem(entityMgr),
     mStepDelay(10), mTick(0)
 {
-   all<fsn::Transform, Character, CharacterAnimation, MeleeWeapon, Stamina>();
+   all<fsn::Transform, Character, CharacterAnimation, MeleeWeapon, Shield, Stamina>();
 }
 
 void CharacterPredictionSystem::end(const float dt)
@@ -117,7 +118,7 @@ CharacterAction CharacterPredictionSystem::createCharacterAction(const fsn::Enti
         case MoveState::Idle:
         case MoveState::Walking:
         {
-            if (input.guard && stamina.getStamina() >= 50)
+            if (input.guard && stamina.getStamina() >= 25)
             {
                 action.guard = true;
             }
@@ -140,7 +141,7 @@ CharacterAction CharacterPredictionSystem::createCharacterAction(const fsn::Enti
                 {
                     action.left = true;
 
-                    if (input.attack && state.attackCoolDown == 0 && stamina.takeStamina(25))
+                    if (input.attack && state.attackCoolDown == 0 && stamina.takeStamina(20))
                     {
                         action.dashAttack = true;
                     }
@@ -149,7 +150,7 @@ CharacterAction CharacterPredictionSystem::createCharacterAction(const fsn::Enti
                 {
                     action.right = true;
 
-                    if (input.attack && state.attackCoolDown == 0 && stamina.takeStamina(25))
+                    if (input.attack && state.attackCoolDown == 0 && stamina.takeStamina(20))
                     {
                         action.dashAttack = true;
                     }
@@ -161,7 +162,7 @@ CharacterAction CharacterPredictionSystem::createCharacterAction(const fsn::Enti
 
         case MoveState::Guarding:
         {
-            if (input.guard && stamina.getStamina() >= 50)
+            if (input.guard && stamina.getStamina() >= 25)
             {
                 action.guard = true;
             }
@@ -191,10 +192,12 @@ void CharacterPredictionSystem::setNewState(const fsn::EntityRef& entity, const 
     auto& transform = entity.getComponent<fsn::Transform>();
     auto& anim = entity.getComponent<CharacterAnimation>();
     auto& weap = entity.getComponent<MeleeWeapon>();
+    auto& shield = entity.getComponent<Shield>();
 
     transform.setPosition(state.position);
 
     weap.attack = false;
+    shield.guard = false;
 
     if (state.direction == Direction::Left)
     {
@@ -215,6 +218,7 @@ void CharacterPredictionSystem::setNewState(const fsn::EntityRef& entity, const 
     }
     else if (state.moveState == MoveState::Guarding)
     {
+        shield.guard = true;
         anim.setAnimation(KnightAnimation::Guard);
     }
     else if (state.moveState == MoveState::Attacking || state.moveState == MoveState::DashingAttacking)

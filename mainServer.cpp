@@ -20,6 +20,7 @@
 #include "Components/HitPoints.h"
 #include "Components/KnightAI.h"
 #include "Components/MeleeWeapon.h"
+#include "Components/Shield.h"
 #include "Components/Stamina.h"
 #include "Components/Team.h"
 
@@ -54,6 +55,7 @@ int main()
     fsn::ComponentTypeManager::add<HitPoints>();
     fsn::ComponentTypeManager::add<KnightAI>();
     fsn::ComponentTypeManager::add<MeleeWeapon>();
+    fsn::ComponentTypeManager::add<Shield>();
     fsn::ComponentTypeManager::add<Stamina>();
     fsn::ComponentTypeManager::add<Team>();
 
@@ -114,6 +116,7 @@ int main()
     entity.addComponent<HitPoints>(100);
     entity.addComponent<KnightAI>();
     entity.addComponent<MeleeWeapon>();
+    entity.addComponent<Shield>();
     entity.addComponent<Stamina>();
     entity.addComponent<Team>();
     entity.setTag(etags::Player);

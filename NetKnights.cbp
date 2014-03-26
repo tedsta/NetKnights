@@ -75,6 +75,7 @@
 		<Unit filename="include/Components/HitBox.h" />
 		<Unit filename="include/Components/HitPoints.h" />
 		<Unit filename="include/Components/MeleeWeapon.h" />
+		<Unit filename="include/Components/Shield.h" />
 		<Unit filename="include/Components/Stamina.h" />
 		<Unit filename="include/EntityTags.h" />
 		<Unit filename="include/Events.h" />
@@ -86,6 +87,7 @@
 		<Unit filename="include/Systems/ClientCharacterPredictionSystem.h" />
 		<Unit filename="include/Systems/DeathSystem.h" />
 		<Unit filename="include/Systems/HPInvulnerabilitySystem.h" />
+		<Unit filename="include/Systems/KnightAISystem.h" />
 		<Unit filename="include/Systems/MeleeWeaponSystem.h" />
 		<Unit filename="include/Systems/PlayerInputSystem.h" />
 		<Unit filename="include/Systems/ServerCharacterPredictionSystem.h" />
@@ -106,6 +108,7 @@
 		<Unit filename="src/Systems/ClientCharacterPredictionSystem.cpp" />
 		<Unit filename="src/Systems/DeathSystem.cpp" />
 		<Unit filename="src/Systems/HPInvulnerabilitySystem.cpp" />
+		<Unit filename="src/Systems/KnightAISystem.cpp" />
 		<Unit filename="src/Systems/MeleeWeaponSystem.cpp" />
 		<Unit filename="src/Systems/PlayerInputSystem.cpp" />
 		<Unit filename="src/Systems/ServerCharacterPredictionSystem.cpp" />

@@ -5,6 +5,8 @@
 #include "Components/MeleeWeapon.h"
 #include "Components/HitBox.h"
 #include "Components/HitPoints.h"
+#include "Components/Shield.h"
+#include "Components/Stamina.h"
 
 MeleeWeaponSystem::MeleeWeaponSystem(fsn::EntityManager& entityMgr) : fsn::ComponentSystem(entityMgr),
     mEntityManager(entityMgr)
@@ -33,6 +35,10 @@ void MeleeWeaponSystem::processEntity(const fsn::EntityRef& entity, const float 
             auto& hitBox = hittable.getComponent<HitBox>();
             auto& hp = hittable.getComponent<HitPoints>();
 
+            // Can't touch this
+            if (!hp.canDamage(entity))
+                continue;
+
             sf::FloatRect hittableArea = hitBox.rect;
             hittableArea.left += hTransform.getPosition().x;
             hittableArea.top += hTransform.getPosition().y;
@@ -43,7 +49,20 @@ void MeleeWeaponSystem::processEntity(const fsn::EntityRef& entity, const float 
 
             if (hittableArea.intersects(weapArea))
             {
-                hp.damage(weap.damage, 30, entity);
+                if (hittable.hasComponent<Shield>() && hittable.hasComponent<Stamina>())
+                {
+                    auto& shield = hittable.getComponent<Shield>();
+                    auto& stamina = hittable.getComponent<Stamina>();
+
+                    if (shield.guard && stamina.takeStamina(25))
+                    {
+                        // Block the attack
+                        hp.addInvulnerability(20, entity);
+                        continue;
+                    }
+                }
+
+                hp.damage(weap.damage, 20, entity);
             }
         }
 

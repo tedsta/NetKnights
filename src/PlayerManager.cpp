@@ -11,6 +11,7 @@
 #include "Components/HitBox.h"
 #include "Components/HitPoints.h"
 #include "Components/MeleeWeapon.h"
+#include "Components/Shield.h"
 #include "Components/Stamina.h"
 #include "Components/Team.h"
 
@@ -42,6 +43,7 @@ const fsn::EntityRef& PlayerManager::spawnPlayer(int netID)
     entity.addComponent<HitBox>();
     entity.addComponent<HitPoints>(100);
     entity.addComponent<MeleeWeapon>();
+    entity.addComponent<Shield>();
     entity.addComponent<Stamina>();
     entity.addComponent<Team>();
     entity.setTag(etags::Player);

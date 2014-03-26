@@ -122,7 +122,7 @@ CharacterState CharacterMover::step(const CharacterState& initial, const Charact
                 // dashTimeLeft to full.
 
                 after.attackTimeLeft = 15;
-                after.attackCoolDown = 45;
+                after.attackCoolDown = 25;
                 after.moveState = MoveState::Idle;
 
                 break;
