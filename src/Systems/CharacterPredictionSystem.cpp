@@ -151,7 +151,6 @@ CharacterAction CharacterPredictionSystem::createCharacterAction(const fsn::Enti
 
                     if (input.attack && state.attackCoolDown == 0 && stamina.takeStamina(25))
                     {
-                        std::cout << "Dash\n";
                         action.dashAttack = true;
                     }
                 }

@@ -29,6 +29,7 @@
 #include "Systems/KnightAISystem.h"
 #include "Systems/MeleeWeaponSystem.h"
 #include "Systems/ServerCharacterPredictionSystem.h"
+#include "Systems/StaminaReplenishSystem.h"
 
 #include "Events.h"
 
@@ -80,6 +81,7 @@ int main()
     DeathSystem deathSys(entityMgr, eventMgr);
     HPInvulnerabilitySystem hpInvulSys(entityMgr);
     KnightAISystem knightAISys(entityMgr, eventMgr);
+    StaminaReplenishSystem staminaRepSys(entityMgr);
 
     engine.addSystem(spriteSys);
     engine.addSystem(inputSys);
@@ -89,6 +91,7 @@ int main()
     engine.addSystem(deathSys);
     engine.addSystem(hpInvulSys);
     engine.addSystem(knightAISys);
+    engine.addSystem(staminaRepSys);
 
     // Register everything with the EventManager
     eventMgr.addListener(&ServerCharacterPredictionSystem::onCharacterInput, charPredictSys);

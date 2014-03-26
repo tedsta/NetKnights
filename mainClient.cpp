@@ -28,6 +28,7 @@
 #include "Systems/HPInvulnerabilitySystem.h"
 #include "Systems/MeleeWeaponSystem.h"
 #include "Systems/PlayerInputSystem.h"
+#include "Systems/StaminaReplenishSystem.h"
 
 #include "Events.h"
 
@@ -69,6 +70,7 @@ int main()
     CharacterAnimationSystem charAnimSys(entityMgr);
     MeleeWeaponSystem meleeWeapSys(entityMgr);
     HPInvulnerabilitySystem hpInvulSys(entityMgr);
+    StaminaReplenishSystem staminaRepSys(entityMgr);
 
     engine.addSystem(spriteSys);
     engine.addSystem(inputSys);
@@ -77,6 +79,7 @@ int main()
     engine.addSystem(charAnimSys);
     engine.addSystem(meleeWeapSys);
     engine.addSystem(hpInvulSys);
+    engine.addSystem(staminaRepSys);
 
     // Game specific manager type stuff
     ClientNetworkLayer networkLayer(eventMgr, entityMgr, conn);

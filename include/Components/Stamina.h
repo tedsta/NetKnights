@@ -22,6 +22,11 @@ class Stamina : public fsn::Component
             packet >> *this;
         }
 
+        void addStamina(std::size_t stamina)
+        {
+            mStamina += stamina;
+        }
+
         bool takeStamina(std::size_t stamina)
         {
             if (mStamina >= stamina)

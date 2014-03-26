@@ -11,7 +11,7 @@ class MeleeWeapon : public fsn::Component
     FISSION_COMPONENT
 
     public:
-        MeleeWeapon() : hitBox(0.f, 0.f, 32.f, 32.f), direction(1, 0), damage(25), attackDuration(15), attackDurationLeft(attackDuration), attack(false) {}
+        MeleeWeapon() : hitBox(0.f, 0.f, 32.f, 32.f), direction(1, 0), damage(10), attackDuration(15), attackDurationLeft(attackDuration), attack(false) {}
 
         void serialize(fsn::Packet& packet)
         {
